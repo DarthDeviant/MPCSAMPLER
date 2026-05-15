@@ -30,17 +30,13 @@ body{
   position:relative;
   overflow:hidden;
 }
-.rivet{
-  position:absolute;width:6px;height:6px;border-radius:50%;
-  background:radial-gradient(circle at 30% 30%,#3a3a3a,#111);
-  box-shadow:inset 0 1px 1px rgba(255,255,255,0.07);
-}
+.rivet{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#3a3a3a,#111);box-shadow:inset 0 1px 1px rgba(255,255,255,0.07);}
 
 /* ── Header ── */
-.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #1c1c1c}
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #1c1c1c;flex-wrap:wrap;gap:10px}
 .logo{color:#ff6b00;font-size:21px;font-weight:bold;letter-spacing:10px;text-shadow:0 0 24px rgba(255,107,0,0.55)}
 .logo-sub{color:#2a2a2a;font-size:8px;letter-spacing:4px}
-.transport{display:flex;gap:18px;align-items:center}
+.transport{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
 .bpm-wrap{text-align:right}
 .bpm-lbl,.mvol-lbl{color:#2a2a2a;font-size:7px;letter-spacing:2px}
 .mvol-lbl{margin-bottom:3px}
@@ -51,6 +47,19 @@ body{
 .led{width:7px;height:7px;border-radius:50%;background:#1a1a1a}
 .led.on{background:#ff6b00;box-shadow:0 0 8px rgba(255,107,0,0.7)}
 .led-txt{color:#222;font-size:6px;letter-spacing:.5px}
+
+/* ── Session controls ── */
+.sess-btns{display:flex;gap:5px;align-items:center}
+.sess-btn{
+  padding:5px 9px;border-radius:4px;border:1px solid #1e1e2e;
+  background:#0c0c18;color:#3a3a6a;font-size:8px;letter-spacing:1.5px;
+  cursor:pointer;font-family:'Courier New',monospace;transition:all .12s;white-space:nowrap;
+}
+.sess-btn:hover{background:#141428;color:#6688ff;border-color:#2a2a5a;}
+.sess-btn.export-btn{border-color:#1e2e1e;background:#0c180c;color:#2a4a2a;}
+.sess-btn.export-btn:hover{background:#0f200f;color:#4dff91;border-color:#2a5a2a;}
+.sess-btn.import-btn{border-color:#2e1e1e;background:#180c0c;color:#4a2a2a;}
+.sess-btn.import-btn:hover{background:#200f0f;color:#ff8a65;border-color:#5a2a2a;}
 
 /* ── Main Grid ── */
 .main-grid{display:grid;grid-template-columns:250px 1fr;gap:18px}
@@ -110,13 +119,7 @@ body{
 .prev-dot.playing{background:#4dff91;box-shadow:0 0 5px rgba(77,255,145,0.7)}
 .prev-dot.paused{background:#ffca28;box-shadow:0 0 5px rgba(255,202,40,0.5);animation:blink .9s step-end infinite}
 @keyframes blink{50%{opacity:0.15}}
-.prev-btn{
-  padding:3px 7px;border-radius:3px;
-  border:1px solid #0d200d;background:#060e06;
-  color:#1d3a1d;font-size:9px;line-height:1;
-  cursor:pointer;font-family:'Courier New',monospace;
-  transition:all .1s;
-}
+.prev-btn{padding:3px 7px;border-radius:3px;border:1px solid #0d200d;background:#060e06;color:#1d3a1d;font-size:9px;line-height:1;cursor:pointer;font-family:'Courier New',monospace;transition:all .1s;}
 .prev-btn:hover:not(:disabled){background:#0b1c0b;color:#3dcc73;border-color:#164a16}
 .prev-btn.is-playing{background:#0a1e0a;color:#4dff91;border-color:#1a5a1a}
 .prev-btn.is-paused-resume{background:#18180a;color:#ffca28;border-color:#3a3a10}
@@ -124,13 +127,7 @@ body{
 
 /* ── Mode toggle ── */
 .mode-row{display:flex;gap:4px;margin-bottom:9px}
-.mode-btn{
-  flex:1;padding:6px 4px;border-radius:4px;
-  border:1px solid #141420;background:#0c0c18;
-  color:#252540;font-size:8px;letter-spacing:.5px;
-  cursor:pointer;font-family:'Courier New',monospace;
-  text-align:center;transition:all .12s;line-height:1.5;
-}
+.mode-btn{flex:1;padding:6px 4px;border-radius:4px;border:1px solid #141420;background:#0c0c18;color:#252540;font-size:8px;letter-spacing:.5px;cursor:pointer;font-family:'Courier New',monospace;text-align:center;transition:all .12s;line-height:1.5;}
 .mode-btn.sel-shot{background:#1a1a08;color:#ffca28;border-color:#38381a;box-shadow:0 0 10px rgba(255,202,40,0.12)}
 .mode-btn.sel-hold{background:#081818;color:#26c6da;border-color:#123232;box-shadow:0 0 10px rgba(38,198,218,0.12)}
 
@@ -174,9 +171,88 @@ body{
 .footer{margin-top:14px;padding-top:10px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
 .foot-help{color:#252525;font-size:8px;letter-spacing:1px}
 .foot-armed{color:#1a3a1a;font-size:8px}
+
+/* ── Speed Dial ── */
+.speed-dial{margin-top:14px;background:#060610;border:1px solid #12122a;border-radius:8px;overflow:hidden}
+.sd-hdr{
+  padding:8px 14px;background:#08080f;border-bottom:1px solid #12122a;
+  display:flex;justify-content:space-between;align-items:center;cursor:pointer;
+  transition:background .12s;
+}
+.sd-hdr:hover{background:#0c0c16}
+.sd-title{color:#4a5aaa;font-size:8px;letter-spacing:3px;display:flex;align-items:center;gap:8px}
+.sd-title-icon{font-size:10px}
+.sd-toggle{color:#1e1e3e;font-size:8px;letter-spacing:1px}
+.sd-body{padding:12px}
+.sd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sd-slot{
+  background:#0a0a18;border:1px solid #14142a;border-radius:5px;
+  padding:8px;display:flex;flex-direction:column;gap:4px;min-height:68px;
+  transition:border-color .12s;
+}
+.sd-slot.has-data{border-color:#1e1e3a;}
+.sd-slot.has-data:hover{border-color:#2a2a5a;}
+.sd-slot-num{color:#151530;font-size:7px;letter-spacing:1px}
+.sd-slot-name{color:#5568cc;font-size:9px;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:bold}
+.sd-slot-meta{color:#1a1a38;font-size:7px;letter-spacing:.5px}
+.sd-slot-actions{display:flex;gap:3px;margin-top:auto}
+.sd-btn{
+  padding:3px 6px;border:none;border-radius:3px;
+  font-size:7px;letter-spacing:.5px;cursor:pointer;
+  font-family:'Courier New',monospace;transition:all .1s;
+}
+.sd-btn-load{flex:1;background:#12122a;color:#4466ee;border:1px solid #1e1e3a;}
+.sd-btn-load:hover{background:#18183a;color:#6688ff;}
+.sd-btn-save{background:#181808;color:#666620;border:1px solid #282810;}
+.sd-btn-save:hover{background:#222208;color:#aaaa20;}
+.sd-btn-clear{background:#180808;color:#662020;border:1px solid #281010;}
+.sd-btn-clear:hover{background:#220a0a;color:#ff4444;}
+.sd-empty-save{
+  width:100%;padding:5px;border:1px dashed #14142a;border-radius:3px;
+  background:transparent;color:#1e1e3a;font-size:7px;cursor:pointer;
+  font-family:'Courier New',monospace;letter-spacing:.5px;
+  transition:all .12s;margin-top:auto;
+}
+.sd-empty-save:hover{border-color:#2a2a5a;color:#4444aa;}
+.sd-pips{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
+.sd-pip{width:5px;height:5px;border-radius:1px;opacity:.7}
+.sd-hint{color:#111128;font-size:7px;letter-spacing:1px;text-align:center;padding:4px 0 0}
+
+/* ── Toast ── */
+#toastMsg{
+  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
+  background:#0e0e18;border:1px solid #2a2a4a;
+  font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;
+  padding:9px 22px;border-radius:5px;z-index:9999;
+  transition:opacity .35s;pointer-events:none;opacity:0;
+  box-shadow:0 8px 32px rgba(0,0,0,0.7);
+  white-space:nowrap;
+}
+
+/* ── Progress overlay ── */
+#progressOverlay{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);
+  z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:14px;
+}
+#progressOverlay.visible{display:flex;}
+.prog-box{background:#0e0e18;border:1px solid #2a2a4a;border-radius:8px;padding:24px 36px;text-align:center}
+.prog-title{color:#6688ff;font-size:10px;letter-spacing:3px;margin-bottom:12px}
+.prog-bar-wrap{width:260px;height:4px;background:#14142a;border-radius:2px;overflow:hidden}
+.prog-bar{height:100%;background:#6688ff;border-radius:2px;transition:width .1s;width:0%}
+.prog-msg{color:#3a3a6a;font-size:8px;letter-spacing:1px;margin-top:8px}
 </style>
 </head>
 <body>
+
+<div id="progressOverlay">
+  <div class="prog-box">
+    <div class="prog-title" id="progTitle">PROCESSING</div>
+    <div class="prog-bar-wrap"><div class="prog-bar" id="progBar"></div></div>
+    <div class="prog-msg" id="progMsg">please wait…</div>
+  </div>
+</div>
+<div id="toastMsg"></div>
+
 <div class="chassis">
   <div class="rivet" style="top:10px;left:18px"></div>
   <div class="rivet" style="top:10px;right:30px"></div>
@@ -202,6 +278,14 @@ body{
         <div class="led-item"><div class="led"></div><div class="led-txt">REC</div></div>
         <div class="led-item"><div class="led"></div><div class="led-txt">OVR</div></div>
         <div class="led-item"><div class="led on"></div><div class="led-txt">BANK</div></div>
+      </div>
+      <!-- Session controls -->
+      <div class="sess-btns">
+        <button class="sess-btn export-btn" onclick="exportSession()" title="Export full session as .chopx file (audio embedded)">⬇ EXPORT</button>
+        <label class="sess-btn import-btn" style="cursor:pointer" title="Import a .chopx session file">
+          ⬆ IMPORT
+          <input type="file" accept=".chopx,.json" onchange="importSession(this)" style="display:none">
+        </label>
       </div>
     </div>
   </div>
@@ -238,15 +322,12 @@ body{
           <span class="lcd-title" id="edTitle">SAMPLE EDITOR</span>
           <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
             <button class="btn" id="btnAll" style="white-space:nowrap">ALL</button>
-
-            <!-- Preview transport -->
             <div class="prev-transport">
               <div class="prev-dot" id="prevDot"></div>
               <button class="prev-btn" id="btnPlay"  title="Play preview"  disabled>▶</button>
               <button class="prev-btn" id="btnPause" title="Pause preview" disabled>⏸</button>
               <button class="prev-btn" id="btnStop"  title="Stop preview"  disabled>■</button>
             </div>
-
             <button class="btn" id="btnCrop" style="white-space:nowrap">✂ CROP</button>
           </div>
         </div>
@@ -265,6 +346,21 @@ body{
     <div class="foot-help">KEYS: Z–V · A–F · Q–R · 1–4 &nbsp;|&nbsp; DRAG WAVEFORM = SET CHOP REGION &nbsp;|&nbsp; SHOT = full chop on tap &nbsp;|&nbsp; HOLD = sustain while pressed &nbsp;|&nbsp; DBL-CLICK KNOB = RESET</div>
     <div class="foot-armed" id="armedCt">0/16 PADS ARMED</div>
   </div>
+
+  <!-- Speed Dial -->
+  <div class="speed-dial">
+    <div class="sd-hdr" onclick="toggleSpeedDial()" id="sdHdr">
+      <div class="sd-title"><span class="sd-title-icon">⚡</span>SPEED DIAL &nbsp;<span style="color:#1a1a32;font-size:7px">SAVED KITS · CLICK TO EXPAND</span></div>
+      <div class="sd-toggle" id="sdToggle">▼ SHOW</div>
+    </div>
+    <div id="sdBody" style="display:none">
+      <div class="sd-body">
+        <div class="sd-grid" id="sdGrid"></div>
+        <div class="sd-hint" id="sdHint">SAVES PAD LAYOUT &amp; CHOP SETTINGS · AUDIO MATCHED BY FILENAME · USE EXPORT FOR FULL PORTABILITY</div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <script>
@@ -293,7 +389,7 @@ const state={
     id:i, label:PAD_LABELS[i], color:PAD_COLORS[i],
     sampleId:null, startRatio:0, endRatio:1,
     loop:false, volume:0.9, pitch:0, attack:0, release:0,
-    mode:'shot',   // 'shot' | 'hold'
+    mode:'shot',
   })),
   selectedPad:null,
   editorId:null,
@@ -302,11 +398,10 @@ const state={
   masterVol:0.8,
   isDragging:false,
   dragStart:0,
-  // Preview state
-  prevStatus:'stopped',   // 'stopped' | 'playing' | 'paused'
-  prevOffset:0,           // seconds into the region at pause point
-  prevCtxStartTime:0,     // audioCtx.currentTime when current playback started
-  prevRegionDur:0,        // total region duration in seconds
+  prevStatus:'stopped',
+  prevOffset:0,
+  prevCtxStartTime:0,
+  prevRegionDur:0,
 };
 
 // ── Audio ─────────────────────────────────────────────────────────────────────
@@ -367,20 +462,15 @@ function playPad(padId){
   const ctx=getCtx();
   const buf=bufs[pad.sampleId];
   if(!buf) return;
-
   try{srcs[padId]?.stop();}catch{}
-
   const gn=ctx.createGain();
   gn.connect(masterGain);
   gainNodes[padId]=gn;
-
   const src=ctx.createBufferSource();
   src.buffer=buf;
   src.connect(gn);
-
   const rate=Math.pow(2,pad.pitch/12);
   src.playbackRate.value=rate;
-
   const s   =pad.startRatio*buf.duration;
   const e   =pad.endRatio  *buf.duration;
   const dur =Math.max(0.002,e-s);
@@ -388,10 +478,8 @@ function playPad(padId){
   const now =ctx.currentTime;
   const atk =Math.max(0.002,pad.attack||0.002);
   const rel =pad.release||0;
-
   gn.gain.setValueAtTime(0,now);
   gn.gain.linearRampToValueAtTime(pad.volume,now+atk);
-
   if(pad.loop){
     src.loop=true; src.loopStart=s; src.loopEnd=e;
     src.start(0,s);
@@ -408,7 +496,6 @@ function playPad(padId){
       renderPads();
     };
   }
-
   srcs[padId]=src;
   state.activePads.add(padId);
   renderPads();
@@ -417,22 +504,16 @@ function playPad(padId){
 function stopPad(padId){
   const pad=state.pads[padId];
   if(!pad) return;
-  // SHOT: ignore release unless loop
   if(pad.mode==='shot'&&!pad.loop) return;
-
   const ctx=getCtx();
   const gn=gainNodes[padId];
   const rel=pad.release||0;
-
   if(gn&&rel>0.01){
     const now=ctx.currentTime;
     gn.gain.cancelScheduledValues(now);
     gn.gain.setValueAtTime(gn.gain.value,now);
     gn.gain.linearRampToValueAtTime(0,now+rel);
-    setTimeout(()=>{
-      try{srcs[padId]?.stop();}catch{}
-      delete srcs[padId]; delete gainNodes[padId];
-    },(rel+0.05)*1000);
+    setTimeout(()=>{try{srcs[padId]?.stop();}catch{}delete srcs[padId]; delete gainNodes[padId];},(rel+0.05)*1000);
   } else {
     try{srcs[padId]?.stop();}catch{}
     delete srcs[padId]; delete gainNodes[padId];
@@ -447,29 +528,18 @@ function _launchPreview(offsetSec){
   const ctx=getCtx();
   const buf=bufs[state.editorId];
   if(!buf) return;
-
   const rStart=state.region.start*buf.duration;
   const rDur  =Math.max(0.002,(state.region.end-state.region.start)*buf.duration);
   const remaining=Math.max(0.005,rDur-offsetSec);
-
   try{srcs['_prev']?.stop();}catch{}
-
   const src=ctx.createBufferSource();
-  src.buffer=buf;
-  src.connect(masterGain);
+  src.buffer=buf; src.connect(masterGain);
   src.start(0,rStart+offsetSec,remaining);
-
   state.prevCtxStartTime=ctx.currentTime;
   state.prevOffset      =offsetSec;
   state.prevRegionDur   =rDur;
-
   src.onended=()=>{
-    // Only transition to stopped if we weren't the ones who stopped it
-    if(state.prevStatus==='playing'){
-      state.prevStatus='stopped';
-      state.prevOffset=0;
-      syncPreviewUI();
-    }
+    if(state.prevStatus==='playing'){state.prevStatus='stopped';state.prevOffset=0;syncPreviewUI();}
   };
   srcs['_prev']=src;
 }
@@ -486,7 +556,6 @@ function pausePreview(){
   if(state.prevStatus!=='playing') return;
   const ctx=getCtx();
   const elapsed=ctx.currentTime-state.prevCtxStartTime;
-  // Clamp so we don't exceed region length
   state.prevOffset=Math.min(state.prevRegionDur-0.005, state.prevOffset+elapsed);
   state.prevStatus='paused';
   try{srcs['_prev']?.stop();}catch{}
@@ -495,8 +564,7 @@ function pausePreview(){
 }
 
 function stopPreview(){
-  state.prevStatus='stopped';
-  state.prevOffset=0;
+  state.prevStatus='stopped'; state.prevOffset=0;
   try{srcs['_prev']?.stop();}catch{}
   delete srcs['_prev'];
   syncPreviewUI();
@@ -510,19 +578,12 @@ function syncPreviewUI(){
   const btnPa =document.getElementById('btnPause');
   const btnSt =document.getElementById('btnStop');
   if(!dot) return;
-
   dot.className='prev-dot'+(ps==='playing'?' playing':ps==='paused'?' paused':'');
-
-  // Play: disabled when already playing; shows "resume" tint when paused
   btnPl.disabled=!has||(ps==='playing');
   btnPl.className='prev-btn'+(ps==='playing'?' is-playing':ps==='paused'?' is-paused-resume':'');
   btnPl.title=ps==='paused'?'Resume preview':'Play preview';
-
-  // Pause: only active while playing
   btnPa.disabled=!has||ps!=='playing';
   btnPa.className='prev-btn'+(ps==='playing'?' is-playing':'');
-
-  // Stop: disabled when already stopped
   btnSt.disabled=!has||ps==='stopped';
   btnSt.className='prev-btn'+(ps!=='stopped'?' is-playing':'');
 }
@@ -534,7 +595,6 @@ function cropSample(){
   const buf=bufs[state.editorId];
   const sample=state.samples.find(s=>s.id===state.editorId);
   if(!buf||!sample) return;
-
   const rate=buf.sampleRate;
   const sIdx=Math.floor(state.region.start*buf.length);
   const eIdx=Math.ceil (state.region.end  *buf.length);
@@ -624,7 +684,7 @@ function cPos(e){const r=wc.getBoundingClientRect();return Math.max(0,Math.min(1
 wc.addEventListener('mousedown',e=>{
   if(!state.editorId)return;
   e.preventDefault();
-  stopPreview(); // region change invalidates paused position
+  stopPreview();
   const x=cPos(e);
   state.isDragging=true;state.dragStart=x;state.region={start:x,end:x};
   drawWaveform();renderWaveReadout();
@@ -808,7 +868,6 @@ function renderInspector(){
 
   body.innerHTML=`
     <div style="color:#3a55aa;font-size:10px;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sn}</div>
-
     <div style="margin-bottom:8px">
       <div style="color:#2a2a4a;font-size:7px;letter-spacing:1px;margin-bottom:4px">PLAY MODE</div>
       <div class="mode-row">
@@ -820,7 +879,6 @@ function renderInspector(){
         </button>
       </div>
     </div>
-
     <div class="info-grid">
       <div class="info-cell"><div class="info-k">IN</div><div class="info-v">${fmt(inT)}</div></div>
       <div class="info-cell"><div class="info-k">OUT</div><div class="info-v">${fmt(outT)}</div></div>
@@ -895,6 +953,348 @@ document.getElementById('btnPause').addEventListener('click',pausePreview);
 document.getElementById('btnStop') .addEventListener('click',stopPreview);
 document.getElementById('btnCrop') .addEventListener('click',cropSample);
 document.getElementById('assignBtn').addEventListener('click',assign);
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ── TOAST ─────────────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+function toast(msg,color='#4dff91'){
+  const t=document.getElementById('toastMsg');
+  t.textContent=msg; t.style.color=color; t.style.opacity='1';
+  clearTimeout(t._tid);
+  t._tid=setTimeout(()=>{t.style.opacity='0';},2600);
+}
+
+// ── Progress overlay ──────────────────────────────────────────────────────────
+function showProgress(title,msg,pct){
+  const o=document.getElementById('progressOverlay');
+  document.getElementById('progTitle').textContent=title;
+  document.getElementById('progMsg').textContent=msg;
+  document.getElementById('progBar').style.width=pct+'%';
+  o.classList.add('visible');
+}
+function hideProgress(){document.getElementById('progressOverlay').classList.remove('visible');}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ── WAV ENCODER ───────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+function writeStr(v,o,s){for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}
+
+function encodeWAV(buf){
+  const nc=buf.numberOfChannels, sr=buf.sampleRate, len=buf.length;
+  const dataLen=len*nc*2;
+  const ab=new ArrayBuffer(44+dataLen);
+  const v=new DataView(ab);
+  writeStr(v,0,'RIFF'); v.setUint32(4,36+dataLen,true); writeStr(v,8,'WAVE');
+  writeStr(v,12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true);
+  v.setUint16(22,nc,true); v.setUint32(24,sr,true);
+  v.setUint32(28,sr*nc*2,true); v.setUint16(32,nc*2,true); v.setUint16(34,16,true);
+  writeStr(v,36,'data'); v.setUint32(40,dataLen,true);
+  const channels=[];
+  for(let c=0;c<nc;c++) channels.push(buf.getChannelData(c));
+  let off=44;
+  for(let i=0;i<len;i++) for(let c=0;c<nc;c++){
+    const s=Math.max(-1,Math.min(1,channels[c][i]));
+    v.setInt16(off,s<0?s*0x8000:s*0x7FFF,true); off+=2;
+  }
+  return ab;
+}
+
+function ab2b64(ab){
+  const bytes=new Uint8Array(ab);
+  let bin='';
+  const CHUNK=8192;
+  for(let i=0;i<bytes.length;i+=CHUNK)
+    bin+=String.fromCharCode(...bytes.subarray(i,Math.min(i+CHUNK,bytes.length)));
+  return btoa(bin);
+}
+
+function b642ab(b64){
+  const bin=atob(b64);
+  const bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  return bytes.buffer;
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ── EXPORT SESSION ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+async function exportSession(){
+  if(!state.samples.length){toast('NO SAMPLES TO EXPORT','#ff5252');return;}
+  showProgress('ENCODING SESSION','preparing audio…',5);
+  await new Promise(r=>setTimeout(r,60));
+
+  try{
+    const samplesData=[];
+    for(let i=0;i<state.samples.length;i++){
+      const s=state.samples[i];
+      showProgress('ENCODING SESSION',`encoding: ${s.name}`,5+Math.floor((i/state.samples.length)*85));
+      await new Promise(r=>setTimeout(r,0)); // yield to render
+      samplesData.push({
+        id:s.id, name:s.name, duration:s.duration,
+        wav: ab2b64(encodeWAV(bufs[s.id]))
+      });
+    }
+
+    showProgress('ENCODING SESSION','building session file…',93);
+    await new Promise(r=>setTimeout(r,0));
+
+    const session={
+      version:2,
+      appName:'CHOP-X',
+      savedAt:new Date().toISOString(),
+      bpm:parseInt(document.getElementById('bpmInput').value)||120,
+      masterVol:state.masterVol,
+      samples:samplesData,
+      pads:state.pads.map(p=>({...p})),
+      region:state.region,
+      editorId:state.editorId,
+    };
+
+    showProgress('ENCODING SESSION','downloading…',99);
+    await new Promise(r=>setTimeout(r,0));
+
+    const json=JSON.stringify(session);
+    const blob=new Blob([json],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    const ts=new Date().toISOString().slice(0,10);
+    a.href=url; a.download=`chopx-${ts}.chopx`;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1000);
+
+    hideProgress();
+    const sizeMB=(blob.size/1048576).toFixed(1);
+    toast(`SESSION EXPORTED · ${sizeMB} MB · ${state.samples.length} SAMPLE${state.samples.length!==1?'S':''}`, '#4dff91');
+  }catch(err){
+    hideProgress();
+    toast('EXPORT FAILED','#ff5252');
+    console.error(err);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ── IMPORT SESSION ─────────────────────────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════════════════════════
+async function importSession(input){
+  const file=input.files[0];
+  if(!file)return;
+  input.value='';
+  showProgress('LOADING SESSION','reading file…',5);
+  await new Promise(r=>setTimeout(r,60));
+
+  try{
+    const text=await file.text();
+    showProgress('LOADING SESSION','parsing session…',12);
+    await new Promise(r=>setTimeout(r,0));
+
+    const session=JSON.parse(text);
+    if(!session.appName||!session.samples){
+      hideProgress(); toast('INVALID .CHOPX FILE','#ff5252'); return;
+    }
+
+    // Stop all playback
+    stopPreview();
+    Object.values(srcs).forEach(s=>{try{s.stop();}catch{}});
+    Object.keys(srcs).forEach(k=>delete srcs[k]);
+    Object.keys(gainNodes).forEach(k=>delete gainNodes[k]);
+    Object.keys(bufs).forEach(k=>delete bufs[k]);
+    Object.keys(waves).forEach(k=>delete waves[k]);
+    state.samples=[];
+    state.activePads.clear();
+    state.selectedPad=null;
+    state.editorId=null;
+
+    const ctx=getCtx();
+    let failed=0;
+    for(let i=0;i<session.samples.length;i++){
+      const sd=session.samples[i];
+      showProgress('LOADING SESSION',`decoding: ${sd.name}`,12+Math.floor((i/session.samples.length)*78));
+      await new Promise(r=>setTimeout(r,0));
+      try{
+        const ab=b642ab(sd.wav);
+        const audioBuf=await ctx.decodeAudioData(ab);
+        bufs[sd.id]=audioBuf;
+        waves[sd.id]=buildWave(audioBuf);
+        state.samples.push({id:sd.id,name:sd.name,duration:sd.duration});
+      }catch(e){
+        console.warn('Failed to decode sample:',sd.name,e);
+        failed++;
+      }
+    }
+
+    showProgress('LOADING SESSION','restoring pads…',93);
+    await new Promise(r=>setTimeout(r,0));
+
+    // Restore pads — null out any sampleId that didn't load
+    session.pads.forEach((p,i)=>{
+      state.pads[i]={...state.pads[i],...p};
+      if(p.sampleId&&!bufs[p.sampleId]) state.pads[i].sampleId=null;
+    });
+
+    state.editorId = session.editorId&&bufs[session.editorId]
+      ? session.editorId
+      : (state.samples[0]?.id||null);
+    state.region = session.region||{start:0,end:1};
+    state.masterVol = session.masterVol||0.8;
+    if(masterGain) masterGain.gain.value=state.masterVol;
+    document.getElementById('masterVol').value=state.masterVol;
+    if(session.bpm) document.getElementById('bpmInput').value=session.bpm;
+
+    renderSampleBrowser(); renderEditorTitle(); drawWaveform();
+    renderWaveReadout(); syncPreviewUI(); renderPads(); renderInspector();
+    renderAssignBtn(); renderArmedCt();
+
+    hideProgress();
+    if(failed>0) toast(`SESSION LOADED · ${failed} SAMPLE${failed!==1?'S':''} FAILED TO DECODE`,'#ffca28');
+    else toast(`SESSION LOADED ✓ · ${state.samples.length} SAMPLE${state.samples.length!==1?'S':''}`, '#4dff91');
+  }catch(err){
+    hideProgress();
+    toast('IMPORT FAILED — CORRUPT OR INVALID FILE','#ff5252');
+    console.error(err);
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// ── SPEED DIAL ─────────────────────────────────────────────────────────────────
+// Saves pad layout + chop settings to localStorage.
+// Audio is matched by sample name when loading.
+// No audio is stored here — use Export for full portability.
+// ═══════════════════════════════════════════════════════════════════════════════
+const SD_KEY   = 'chopx_speeddial_v1';
+const SD_COUNT = 8;
+
+function getSpeedDials(){
+  try{ return JSON.parse(localStorage.getItem(SD_KEY)||'[]'); }
+  catch{ return []; }
+}
+function setSpeedDials(data){
+  try{ localStorage.setItem(SD_KEY,JSON.stringify(data)); }
+  catch{ toast('SAVE FAILED — STORAGE FULL','#ff5252'); }
+}
+
+function saveSpeedDial(slot){
+  // Prevent event from bubbling to toggleSpeedDial
+  event?.stopPropagation();
+  const slots=getSpeedDials();
+  const existing=slots[slot];
+  const defaultName=existing?.name||`Kit ${slot+1}`;
+  const name=prompt(`NAME FOR SLOT ${slot+1}:`, defaultName);
+  if(name===null) return; // cancelled
+
+  // Store pad layout with sample names (not IDs) for matching on re-load
+  const padData=state.pads.map(p=>{
+    const sn=p.sampleId ? (state.samples.find(s=>s.id===p.sampleId)?.name||null) : null;
+    return {...p, _sampleName:sn};
+  });
+
+  slots[slot]={
+    name: name.trim()||defaultName,
+    savedAt: Date.now(),
+    pads: padData,
+    armedCount: state.pads.filter(p=>p.sampleId).length,
+    sampleNames: [...new Set(padData.map(p=>p._sampleName).filter(Boolean))],
+  };
+
+  setSpeedDials(slots);
+  renderSpeedDial();
+  toast(`⚡ SLOT ${slot+1} SAVED — ${slots[slot].name}`, '#6688ff');
+}
+
+function loadSpeedDial(slot){
+  event?.stopPropagation();
+  const slots=getSpeedDials();
+  const sd=slots[slot];
+  if(!sd){ toast(`SLOT ${slot+1} IS EMPTY`, '#ff5252'); return; }
+
+  let matched=0, missing=0;
+  sd.pads.forEach((p,i)=>{
+    const base={...state.pads[i], ...p};
+    delete base._sampleName;
+
+    if(p._sampleName){
+      // Try to find by exact name, then by partial match
+      const found = state.samples.find(s=>s.name===p._sampleName)
+                 || state.samples.find(s=>s.name.includes(p._sampleName)||p._sampleName.includes(s.name));
+      if(found){ base.sampleId=found.id; matched++; }
+      else{ base.sampleId=null; missing++; }
+    } else {
+      base.sampleId=null;
+    }
+    state.pads[i]=base;
+  });
+
+  renderPads(); renderInspector(); renderAssignBtn(); renderArmedCt();
+
+  if(missing>0 && matched===0)
+    toast(`${sd.name} LOADED · LOAD AUDIO FIRST`, '#ffca28');
+  else if(missing>0)
+    toast(`${sd.name} · ${matched} MATCHED · ${missing} MISSING`, '#ffca28');
+  else
+    toast(`⚡ ${sd.name} LOADED · ${matched} PADS`, '#6688ff');
+}
+
+function clearSpeedDial(slot){
+  event?.stopPropagation();
+  const slots=getSpeedDials();
+  const sd=slots[slot];
+  if(!sd) return;
+  if(!confirm(`Clear slot ${slot+1} "${sd.name}"?`)) return;
+  slots[slot]=null;
+  setSpeedDials(slots);
+  renderSpeedDial();
+  toast(`SLOT ${slot+1} CLEARED`, '#ff5252');
+}
+
+function renderSpeedDial(){
+  const grid=document.getElementById('sdGrid');
+  if(!grid) return;
+  const slots=getSpeedDials();
+  grid.innerHTML='';
+
+  for(let i=0;i<SD_COUNT;i++){
+    const sd=slots[i]||null;
+    const wrap=document.createElement('div');
+    wrap.className='sd-slot'+(sd?' has-data':'');
+
+    if(sd){
+      // Colour pips for each pad in the saved layout
+      const pipColors=sd.pads
+        ? sd.pads.map((p,idx)=>p._sampleName?PAD_COLORS[idx]:'').filter(Boolean)
+        : [];
+      const pipHtml=pipColors.slice(0,16).map(c=>`<div class="sd-pip" style="background:${c}"></div>`).join('');
+      const dt=new Date(sd.savedAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
+      wrap.innerHTML=`
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div class="sd-slot-num">SLOT ${i+1}</div>
+          <div style="color:#1e1e38;font-size:7px">${dt}</div>
+        </div>
+        <div class="sd-slot-name">${sd.name}</div>
+        <div class="sd-slot-meta">${sd.armedCount||0} PADS ARMED</div>
+        ${pipHtml?`<div class="sd-pips">${pipHtml}</div>`:''}
+        <div class="sd-slot-actions">
+          <button class="sd-btn sd-btn-load" onclick="loadSpeedDial(${i})">▶ LOAD</button>
+          <button class="sd-btn sd-btn-save" onclick="saveSpeedDial(${i})" title="Overwrite">✎</button>
+          <button class="sd-btn sd-btn-clear" onclick="clearSpeedDial(${i})" title="Delete">✕</button>
+        </div>
+      `;
+    } else {
+      wrap.innerHTML=`
+        <div class="sd-slot-num">SLOT ${i+1}</div>
+        <div class="sd-slot-meta" style="flex:1;display:flex;align-items:center;color:#111128;font-size:8px">EMPTY</div>
+        <button class="sd-empty-save" onclick="saveSpeedDial(${i})">+ SAVE HERE</button>
+      `;
+    }
+    grid.appendChild(wrap);
+  }
+}
+
+let sdVisible=false;
+function toggleSpeedDial(){
+  sdVisible=!sdVisible;
+  document.getElementById('sdBody').style.display=sdVisible?'block':'none';
+  document.getElementById('sdToggle').textContent=sdVisible?'▲ HIDE':'▼ SHOW';
+  if(sdVisible) renderSpeedDial();
+}
 
 // ── Init ──────────────────────────────────────────────────────────────────────
 renderPads();
