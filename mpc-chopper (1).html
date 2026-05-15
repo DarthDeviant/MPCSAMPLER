@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHOP-X · MPC Sample Workstation</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
+body{
+  background:#060606;
+  font-family:'Courier New',monospace;
+  user-select:none;
+  min-height:100vh;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+  padding:16px;
+}
+.chassis{
+  background:linear-gradient(160deg,#1d1d1d,#111);
+  border-radius:14px;
+  padding:22px;
+  width:100%;
+  max-width:1060px;
+  box-shadow:0 30px 90px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04),inset 0 -1px 0 rgba(0,0,0,0.6);
+  border:1px solid #272727;
+  position:relative;
+  overflow:hidden;
+}
+.rivet{
+  position:absolute;width:6px;height:6px;border-radius:50%;
+  background:radial-gradient(circle at 30% 30%,#3a3a3a,#111);
+  box-shadow:inset 0 1px 1px rgba(255,255,255,0.07);
+}
+
+/* ── Header ── */
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #1c1c1c}
+.logo{color:#ff6b00;font-size:21px;font-weight:bold;letter-spacing:10px;text-shadow:0 0 24px rgba(255,107,0,0.55)}
+.logo-sub{color:#2a2a2a;font-size:8px;letter-spacing:4px}
+.transport{display:flex;gap:18px;align-items:center}
+.bpm-wrap{text-align:right}
+.bpm-lbl,.mvol-lbl{color:#2a2a2a;font-size:7px;letter-spacing:2px}
+.mvol-lbl{margin-bottom:3px}
+#bpmInput{background:transparent;border:none;color:#4dff91;font-size:22px;font-family:'Courier New',monospace;width:58px;text-align:right;outline:none}
+#masterVol{width:90px;accent-color:#ff6b00}
+.led-grp{display:flex;gap:10px}
+.led-item{display:flex;flex-direction:column;align-items:center;gap:4px}
+.led{width:7px;height:7px;border-radius:50%;background:#1a1a1a}
+.led.on{background:#ff6b00;box-shadow:0 0 8px rgba(255,107,0,0.7)}
+.led-txt{color:#222;font-size:6px;letter-spacing:.5px}
+
+/* ── Main Grid ── */
+.main-grid{display:grid;grid-template-columns:250px 1fr;gap:18px}
+
+/* ── Left ── */
+.left-panel{display:flex;flex-direction:column;gap:12px}
+.upload-zone{background:#0a0a0a;border:2px dashed #222;border-radius:7px;padding:16px 10px;text-align:center;cursor:pointer;display:block;transition:all .18s}
+.upload-zone.drag-over{background:#0d1a0d;border-color:#ff6b00}
+.upload-icon{font-size:22px;color:#333;margin-bottom:5px;transition:color .2s}
+.upload-icon.spin{color:#ff6b00;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.upload-lbl{color:#444;font-size:9px;letter-spacing:2px}
+.upload-types{color:#222;font-size:8px;margin-top:3px}
+
+/* LCD */
+.lcd{background:#04100a;border:1px solid #0d2010;border-radius:6px;overflow:hidden;box-shadow:inset 0 2px 8px rgba(0,0,0,0.8),0 0 0 1px #0a1a0a}
+.lcd-hdr{padding:6px 12px;background:#060e06;border-bottom:1px solid #0d2010;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.lcd-title{color:#4dff91;font-size:8px;letter-spacing:2.5px;white-space:nowrap}
+.lcd-dim{color:#1a3a1a;font-size:8px}
+
+/* Sample list */
+.s-list{max-height:140px;overflow-y:auto}
+.s-item{padding:7px 11px;cursor:pointer;border-bottom:1px solid #0a1408;display:flex;justify-content:space-between;align-items:center;transition:background .1s}
+.s-item:hover{background:#0a1808}
+.s-item.active{background:#0f2010}
+.s-name{color:#2d4a2d;font-size:10px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.s-name.hi{color:#4dff91}
+.s-dur{color:#1a3a1a;font-size:7px}
+.s-flag{color:#ff6b00;font-size:7px}
+.s-empty{padding:20px;color:#1a2a1a;font-size:9px;text-align:center}
+
+/* Panel (blue tint) */
+.panel{background:#0a0a14;border:1px solid #14142a;border-radius:6px;overflow:hidden;box-shadow:inset 0 2px 8px rgba(0,0,0,0.8)}
+.panel-hdr{padding:6px 10px;background:#080811;border-bottom:1px solid #14142a}
+.panel-title{color:#6688ff;font-size:8px;letter-spacing:2px}
+.panel-body{padding:10px}
+.no-sel{color:#1a1a3a;font-size:9px;text-align:center;padding:18px 0}
+
+/* Inspector */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:10px}
+.info-cell{background:#0c0c1a;padding:4px 7px;border-radius:4px;border:1px solid #14142a}
+.info-k{color:#2a2a4a;font-size:7px}
+.info-v{color:#6688ff;font-size:9px}
+.info-v.orange{color:#ff6b00}
+
+/* Buttons */
+.btn{padding:5px 10px;border-radius:4px;border:none;background:#141414;color:#666;font-size:8px;letter-spacing:1.5px;cursor:pointer;font-family:'Courier New',monospace;transition:all .1s}
+.btn:hover:not(:disabled){background:#1e1e1e;color:#888}
+.btn.on{background:#ff6b00;color:#000}
+.btn:disabled{background:#0e0e0e;color:#2a2a2a;cursor:default}
+.btn-clr{padding:5px 8px;border-radius:4px;border:1px solid #2a1a1a;background:#120909;color:#ff4444;font-size:8px;cursor:pointer;font-family:'Courier New',monospace}
+.btn-play-sm{padding:5px 8px;border-radius:4px;border:none;background:#142014;color:#4dff91;font-size:8px;cursor:pointer;font-family:'Courier New',monospace}
+
+/* ── Preview transport ── */
+.prev-transport{display:flex;gap:3px;align-items:center}
+.prev-dot{width:5px;height:5px;border-radius:50%;background:#122012;flex-shrink:0;transition:background .15s,box-shadow .15s;margin-right:1px}
+.prev-dot.playing{background:#4dff91;box-shadow:0 0 5px rgba(77,255,145,0.7)}
+.prev-dot.paused{background:#ffca28;box-shadow:0 0 5px rgba(255,202,40,0.5);animation:blink .9s step-end infinite}
+@keyframes blink{50%{opacity:0.15}}
+.prev-btn{
+  padding:3px 7px;border-radius:3px;
+  border:1px solid #0d200d;background:#060e06;
+  color:#1d3a1d;font-size:9px;line-height:1;
+  cursor:pointer;font-family:'Courier New',monospace;
+  transition:all .1s;
+}
+.prev-btn:hover:not(:disabled){background:#0b1c0b;color:#3dcc73;border-color:#164a16}
+.prev-btn.is-playing{background:#0a1e0a;color:#4dff91;border-color:#1a5a1a}
+.prev-btn.is-paused-resume{background:#18180a;color:#ffca28;border-color:#3a3a10}
+.prev-btn:disabled{color:#0e1e0e;cursor:default;border-color:#080e08;background:#050905}
+
+/* ── Mode toggle ── */
+.mode-row{display:flex;gap:4px;margin-bottom:9px}
+.mode-btn{
+  flex:1;padding:6px 4px;border-radius:4px;
+  border:1px solid #141420;background:#0c0c18;
+  color:#252540;font-size:8px;letter-spacing:.5px;
+  cursor:pointer;font-family:'Courier New',monospace;
+  text-align:center;transition:all .12s;line-height:1.5;
+}
+.mode-btn.sel-shot{background:#1a1a08;color:#ffca28;border-color:#38381a;box-shadow:0 0 10px rgba(255,202,40,0.12)}
+.mode-btn.sel-hold{background:#081818;color:#26c6da;border-color:#123232;box-shadow:0 0 10px rgba(38,198,218,0.12)}
+
+/* Inspector actions */
+.inspector-actions{display:flex;gap:5px;margin-bottom:7px}
+.vol-lbl{color:#2a2a4a;font-size:7px;margin-bottom:3px}
+.vol-sl{width:100%;accent-color:#6688ff}
+
+/* Knobs */
+.knobs-row{display:flex;gap:4px;justify-content:space-between;margin-top:8px}
+.knob-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.knob-canvas{cursor:ns-resize;display:block;touch-action:none}
+.knob-lbl{color:#2a2a4a;font-size:6px;letter-spacing:1px;text-align:center}
+.knob-val{color:#888;font-size:7px;text-align:center;font-family:'Courier New',monospace;min-height:10px}
+
+/* Right panel */
+.right-panel{display:flex;flex-direction:column;gap:13px}
+#waveCanvas{display:block;width:100%;height:130px;cursor:crosshair}
+#waveCanvas.no-sample{cursor:default}
+.wave-readout{padding:6px 12px;background:#060e06;border-top:1px solid #0d2010;display:flex;gap:22px;flex-wrap:wrap;align-items:center}
+.rk{color:#1a3a1a;font-size:7px}
+.rv{color:#4dff91;font-size:9px;font-family:monospace}
+.no-wave{color:#1a2a1a;font-size:8px}
+
+/* Assign */
+.assign-btn{padding:11px;border-radius:7px;border:none;background:#111;color:#2a2a2a;font-size:10px;font-weight:bold;letter-spacing:3px;cursor:default;font-family:'Courier New',monospace;transition:all .15s;width:100%}
+.assign-btn.ready{background:linear-gradient(90deg,#c05000,#ff6b00);color:#000;cursor:pointer;box-shadow:0 4px 24px rgba(255,107,0,0.45)}
+
+/* Pads */
+.pad-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
+.pad{aspect-ratio:1;border-radius:8px;background:#101010;border:1px solid #1c1c1c;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:9px;transition:transform .04s,box-shadow .04s,background .04s;position:relative;overflow:hidden}
+.pad-lbl{font-size:9px;font-weight:bold;line-height:1}
+.pad-sname{font-size:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
+.pad-key{font-size:8px}
+.pad-glow{position:absolute;inset:0;pointer-events:none;border-radius:8px}
+.pad-mode-pill{font-size:6px;letter-spacing:.5px;padding:1px 3px;border-radius:2px;line-height:1.4}
+.pad-mode-pill.shot{color:#ffca28;background:rgba(255,202,40,0.07);border:1px solid rgba(255,202,40,0.18)}
+.pad-mode-pill.hold{color:#26c6da;background:rgba(38,198,218,0.07);border:1px solid rgba(38,198,218,0.18)}
+
+/* Footer */
+.footer{margin-top:14px;padding-top:10px;border-top:1px solid #181818;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px}
+.foot-help{color:#252525;font-size:8px;letter-spacing:1px}
+.foot-armed{color:#1a3a1a;font-size:8px}
+</style>
+</head>
+<body>
+<div class="chassis">
+  <div class="rivet" style="top:10px;left:18px"></div>
+  <div class="rivet" style="top:10px;right:30px"></div>
+  <div class="rivet" style="bottom:10px;left:18px"></div>
+  <div class="rivet" style="bottom:10px;right:30px"></div>
+
+  <!-- Header -->
+  <div class="hdr">
+    <div>
+      <div class="logo">CHOP-X</div>
+      <div class="logo-sub">MPC SAMPLE WORKSTATION</div>
+    </div>
+    <div class="transport">
+      <div class="bpm-wrap">
+        <div class="bpm-lbl">BPM</div>
+        <input type="number" id="bpmInput" value="120" min="40" max="300">
+      </div>
+      <div>
+        <div class="mvol-lbl">MASTER VOL</div>
+        <input type="range" id="masterVol" min="0" max="1" step="0.01" value="0.8">
+      </div>
+      <div class="led-grp">
+        <div class="led-item"><div class="led"></div><div class="led-txt">REC</div></div>
+        <div class="led-item"><div class="led"></div><div class="led-txt">OVR</div></div>
+        <div class="led-item"><div class="led on"></div><div class="led-txt">BANK</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main -->
+  <div class="main-grid">
+    <!-- Left panel -->
+    <div class="left-panel">
+      <label class="upload-zone" id="uploadZone">
+        <div class="upload-icon" id="uploadIcon">⬆</div>
+        <div class="upload-lbl" id="uploadLbl">DROP SAMPLES</div>
+        <div class="upload-types">MP3 · WAV · OGG · FLAC · AAC</div>
+        <input type="file" id="fileInput" multiple accept="audio/*" style="display:none">
+      </label>
+
+      <div class="lcd">
+        <div class="lcd-hdr">
+          <span class="lcd-title">SAMPLE BROWSER</span>
+          <span class="lcd-dim" id="sCount">0 LOADED</span>
+        </div>
+        <div class="s-list" id="sampleList"><div class="s-empty">NO SAMPLES</div></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-hdr"><span class="panel-title" id="inspTitle">PAD INSPECTOR</span></div>
+        <div class="panel-body" id="inspBody"><div class="no-sel">SELECT A PAD</div></div>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="right-panel">
+      <div class="lcd">
+        <div class="lcd-hdr">
+          <span class="lcd-title" id="edTitle">SAMPLE EDITOR</span>
+          <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
+            <button class="btn" id="btnAll" style="white-space:nowrap">ALL</button>
+
+            <!-- Preview transport -->
+            <div class="prev-transport">
+              <div class="prev-dot" id="prevDot"></div>
+              <button class="prev-btn" id="btnPlay"  title="Play preview"  disabled>▶</button>
+              <button class="prev-btn" id="btnPause" title="Pause preview" disabled>⏸</button>
+              <button class="prev-btn" id="btnStop"  title="Stop preview"  disabled>■</button>
+            </div>
+
+            <button class="btn" id="btnCrop" style="white-space:nowrap">✂ CROP</button>
+          </div>
+        </div>
+        <canvas id="waveCanvas" class="no-sample"></canvas>
+        <div class="wave-readout" id="waveReadout">
+          <span class="no-wave">NO SAMPLE LOADED — UPLOAD A FILE TO BEGIN</span>
+        </div>
+      </div>
+
+      <button class="assign-btn" id="assignBtn">SELECT A PAD BELOW TO ASSIGN CHOP</button>
+      <div class="pad-grid" id="padGrid"></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="foot-help">KEYS: Z–V · A–F · Q–R · 1–4 &nbsp;|&nbsp; DRAG WAVEFORM = SET CHOP REGION &nbsp;|&nbsp; SHOT = full chop on tap &nbsp;|&nbsp; HOLD = sustain while pressed &nbsp;|&nbsp; DBL-CLICK KNOB = RESET</div>
+    <div class="foot-armed" id="armedCt">0/16 PADS ARMED</div>
+  </div>
+</div>
+
+<script>
+// ── Constants ─────────────────────────────────────────────────────────────────
+const PAD_KEYS  = {z:0,x:1,c:2,v:3,a:4,s:5,d:6,f:7,q:8,w:9,e:10,r:11,"1":12,"2":13,"3":14,"4":15};
+const PAD_LABELS= ["A1","A2","A3","A4","B1","B2","B3","B4","C1","C2","C3","C4","D1","D2","D3","D4"];
+const KEY_LABELS= ["Z","X","C","V","A","S","D","F","Q","W","E","R","1","2","3","4"];
+const PAD_COLORS= [
+  "#ff5252","#ff7043","#ffca28","#66bb6a",
+  "#26c6da","#42a5f5","#7e57c2","#ec407a",
+  "#ff8a65","#d4e157","#26a69a","#29b6f6",
+  "#ff6b00","#a5d6a7","#ce93d8","#f48fb1",
+];
+const DISPLAY_ORDER=[12,13,14,15,8,9,10,11,4,5,6,7,0,1,2,3];
+
+const fmt=s=>{
+  if(isNaN(s)||s==null) return "00:00.000";
+  const m=Math.floor(s/60).toString().padStart(2,"0");
+  return `${m}:${(s%60).toFixed(3).padStart(6,"0")}`;
+};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+const state={
+  samples:[],
+  pads: Array.from({length:16},(_,i)=>({
+    id:i, label:PAD_LABELS[i], color:PAD_COLORS[i],
+    sampleId:null, startRatio:0, endRatio:1,
+    loop:false, volume:0.9, pitch:0, attack:0, release:0,
+    mode:'shot',   // 'shot' | 'hold'
+  })),
+  selectedPad:null,
+  editorId:null,
+  activePads:new Set(),
+  region:{start:0,end:1},
+  masterVol:0.8,
+  isDragging:false,
+  dragStart:0,
+  // Preview state
+  prevStatus:'stopped',   // 'stopped' | 'playing' | 'paused'
+  prevOffset:0,           // seconds into the region at pause point
+  prevCtxStartTime:0,     // audioCtx.currentTime when current playback started
+  prevRegionDur:0,        // total region duration in seconds
+};
+
+// ── Audio ─────────────────────────────────────────────────────────────────────
+let audioCtx=null, masterGain=null;
+const bufs={}, waves={}, srcs={}, gainNodes={};
+const pressed=new Set();
+
+function getCtx(){
+  if(!audioCtx){
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    masterGain=audioCtx.createGain();
+    masterGain.gain.value=state.masterVol;
+    masterGain.connect(audioCtx.destination);
+  }
+  if(audioCtx.state==="suspended") audioCtx.resume();
+  return audioCtx;
+}
+
+function buildWave(buf,n=1600){
+  const ch=buf.getChannelData(0);
+  const spp=Math.max(1,Math.floor(ch.length/n));
+  const out=new Float32Array(n);
+  for(let i=0;i<n;i++){
+    let pk=0;
+    for(let j=0;j<spp;j++){const v=Math.abs(ch[i*spp+j]||0);if(v>pk)pk=v;}
+    out[i]=pk;
+  }
+  return out;
+}
+
+async function loadFile(file){
+  const ctx=getCtx();
+  try{
+    const ab=await file.arrayBuffer();
+    const buf=await ctx.decodeAudioData(ab);
+    const id=`s${Date.now()}${Math.random().toString(36).slice(2,5)}`;
+    bufs[id]=buf; waves[id]=buildWave(buf);
+    return {id,name:file.name.replace(/\.[^.]+$/,""),duration:buf.duration};
+  }catch{return null;}
+}
+
+async function handleUpload(files){
+  const icon=document.getElementById('uploadIcon');
+  const lbl =document.getElementById('uploadLbl');
+  icon.textContent="⟳"; icon.className="upload-icon spin"; lbl.textContent="DECODING...";
+  const audio=Array.from(files).filter(f=>f.type.startsWith("audio/")||/\.(mp3|wav|ogg|flac|aac|m4a)$/i.test(f.name));
+  const loaded=(await Promise.all(audio.map(loadFile))).filter(Boolean);
+  state.samples.push(...loaded);
+  if(loaded.length&&!state.editorId){state.editorId=loaded[0].id;state.region={start:0,end:1};}
+  icon.textContent="⬆"; icon.className="upload-icon"; lbl.textContent="DROP SAMPLES";
+  renderSampleBrowser(); renderEditorTitle(); drawWaveform(); renderWaveReadout(); syncPreviewUI();
+}
+
+// ── Pad Play / Stop ───────────────────────────────────────────────────────────
+function playPad(padId){
+  const pad=state.pads[padId];
+  if(!pad?.sampleId) return;
+  const ctx=getCtx();
+  const buf=bufs[pad.sampleId];
+  if(!buf) return;
+
+  try{srcs[padId]?.stop();}catch{}
+
+  const gn=ctx.createGain();
+  gn.connect(masterGain);
+  gainNodes[padId]=gn;
+
+  const src=ctx.createBufferSource();
+  src.buffer=buf;
+  src.connect(gn);
+
+  const rate=Math.pow(2,pad.pitch/12);
+  src.playbackRate.value=rate;
+
+  const s   =pad.startRatio*buf.duration;
+  const e   =pad.endRatio  *buf.duration;
+  const dur =Math.max(0.002,e-s);
+  const wallDur=dur/rate;
+  const now =ctx.currentTime;
+  const atk =Math.max(0.002,pad.attack||0.002);
+  const rel =pad.release||0;
+
+  gn.gain.setValueAtTime(0,now);
+  gn.gain.linearRampToValueAtTime(pad.volume,now+atk);
+
+  if(pad.loop){
+    src.loop=true; src.loopStart=s; src.loopEnd=e;
+    src.start(0,s);
+  } else {
+    if(rel>0.01&&wallDur>atk+rel){
+      const rs=now+wallDur-rel;
+      gn.gain.setValueAtTime(pad.volume,rs);
+      gn.gain.linearRampToValueAtTime(0,rs+rel);
+    }
+    src.start(0,s,wallDur+0.002);
+    src.onended=()=>{
+      state.activePads.delete(padId);
+      delete srcs[padId]; delete gainNodes[padId];
+      renderPads();
+    };
+  }
+
+  srcs[padId]=src;
+  state.activePads.add(padId);
+  renderPads();
+}
+
+function stopPad(padId){
+  const pad=state.pads[padId];
+  if(!pad) return;
+  // SHOT: ignore release unless loop
+  if(pad.mode==='shot'&&!pad.loop) return;
+
+  const ctx=getCtx();
+  const gn=gainNodes[padId];
+  const rel=pad.release||0;
+
+  if(gn&&rel>0.01){
+    const now=ctx.currentTime;
+    gn.gain.cancelScheduledValues(now);
+    gn.gain.setValueAtTime(gn.gain.value,now);
+    gn.gain.linearRampToValueAtTime(0,now+rel);
+    setTimeout(()=>{
+      try{srcs[padId]?.stop();}catch{}
+      delete srcs[padId]; delete gainNodes[padId];
+    },(rel+0.05)*1000);
+  } else {
+    try{srcs[padId]?.stop();}catch{}
+    delete srcs[padId]; delete gainNodes[padId];
+  }
+  state.activePads.delete(padId);
+  renderPads();
+}
+
+// ── Preview Transport ─────────────────────────────────────────────────────────
+function _launchPreview(offsetSec){
+  if(!state.editorId) return;
+  const ctx=getCtx();
+  const buf=bufs[state.editorId];
+  if(!buf) return;
+
+  const rStart=state.region.start*buf.duration;
+  const rDur  =Math.max(0.002,(state.region.end-state.region.start)*buf.duration);
+  const remaining=Math.max(0.005,rDur-offsetSec);
+
+  try{srcs['_prev']?.stop();}catch{}
+
+  const src=ctx.createBufferSource();
+  src.buffer=buf;
+  src.connect(masterGain);
+  src.start(0,rStart+offsetSec,remaining);
+
+  state.prevCtxStartTime=ctx.currentTime;
+  state.prevOffset      =offsetSec;
+  state.prevRegionDur   =rDur;
+
+  src.onended=()=>{
+    // Only transition to stopped if we weren't the ones who stopped it
+    if(state.prevStatus==='playing'){
+      state.prevStatus='stopped';
+      state.prevOffset=0;
+      syncPreviewUI();
+    }
+  };
+  srcs['_prev']=src;
+}
+
+function playPreview(){
+  if(!state.editorId) return;
+  const resumeFrom = state.prevStatus==='paused' ? state.prevOffset : 0;
+  _launchPreview(resumeFrom);
+  state.prevStatus='playing';
+  syncPreviewUI();
+}
+
+function pausePreview(){
+  if(state.prevStatus!=='playing') return;
+  const ctx=getCtx();
+  const elapsed=ctx.currentTime-state.prevCtxStartTime;
+  // Clamp so we don't exceed region length
+  state.prevOffset=Math.min(state.prevRegionDur-0.005, state.prevOffset+elapsed);
+  state.prevStatus='paused';
+  try{srcs['_prev']?.stop();}catch{}
+  delete srcs['_prev'];
+  syncPreviewUI();
+}
+
+function stopPreview(){
+  state.prevStatus='stopped';
+  state.prevOffset=0;
+  try{srcs['_prev']?.stop();}catch{}
+  delete srcs['_prev'];
+  syncPreviewUI();
+}
+
+function syncPreviewUI(){
+  const has=!!state.editorId;
+  const ps =state.prevStatus;
+  const dot   =document.getElementById('prevDot');
+  const btnPl =document.getElementById('btnPlay');
+  const btnPa =document.getElementById('btnPause');
+  const btnSt =document.getElementById('btnStop');
+  if(!dot) return;
+
+  dot.className='prev-dot'+(ps==='playing'?' playing':ps==='paused'?' paused':'');
+
+  // Play: disabled when already playing; shows "resume" tint when paused
+  btnPl.disabled=!has||(ps==='playing');
+  btnPl.className='prev-btn'+(ps==='playing'?' is-playing':ps==='paused'?' is-paused-resume':'');
+  btnPl.title=ps==='paused'?'Resume preview':'Play preview';
+
+  // Pause: only active while playing
+  btnPa.disabled=!has||ps!=='playing';
+  btnPa.className='prev-btn'+(ps==='playing'?' is-playing':'');
+
+  // Stop: disabled when already stopped
+  btnSt.disabled=!has||ps==='stopped';
+  btnSt.className='prev-btn'+(ps!=='stopped'?' is-playing':'');
+}
+
+// ── Crop ─────────────────────────────────────────────────────────────────────
+function cropSample(){
+  if(!state.editorId) return;
+  stopPreview();
+  const buf=bufs[state.editorId];
+  const sample=state.samples.find(s=>s.id===state.editorId);
+  if(!buf||!sample) return;
+
+  const rate=buf.sampleRate;
+  const sIdx=Math.floor(state.region.start*buf.length);
+  const eIdx=Math.ceil (state.region.end  *buf.length);
+  const len =Math.max(2,eIdx-sIdx);
+  const ctx =getCtx();
+  const nb  =ctx.createBuffer(buf.numberOfChannels,len,rate);
+  for(let ch=0;ch<buf.numberOfChannels;ch++){
+    const s=buf.getChannelData(ch),d=nb.getChannelData(ch);
+    for(let i=0;i<len;i++) d[i]=s[sIdx+i]||0;
+  }
+  const id=`s${Date.now()}${Math.random().toString(36).slice(2,5)}`;
+  bufs[id]=nb; waves[id]=buildWave(nb);
+  state.samples.push({id,name:sample.name+'_CROP',duration:nb.duration});
+  state.editorId=id; state.region={start:0,end:1};
+  renderSampleBrowser(); renderEditorTitle(); drawWaveform(); renderWaveReadout(); syncPreviewUI();
+}
+
+function assign(){
+  if(state.selectedPad===null||!state.editorId) return;
+  const p=state.pads[state.selectedPad];
+  state.pads[state.selectedPad]={...p,sampleId:state.editorId,startRatio:state.region.start,endRatio:state.region.end};
+  renderInspector(); renderPads(); renderAssignBtn(); renderArmedCt();
+}
+
+function clearPad(padId){
+  try{srcs[padId]?.stop();}catch{}
+  delete srcs[padId]; delete gainNodes[padId];
+  state.activePads.delete(padId);
+  const p=state.pads[padId];
+  state.pads[padId]={...p,sampleId:null,startRatio:0,endRatio:1,loop:false};
+  renderInspector(); renderPads(); renderAssignBtn(); renderArmedCt();
+}
+
+// ── Waveform canvas ───────────────────────────────────────────────────────────
+const wc  =document.getElementById('waveCanvas');
+const wctx=wc.getContext('2d');
+
+function drawWaveform(){
+  const dpr=window.devicePixelRatio||1;
+  const W=wc.offsetWidth,H=wc.offsetHeight;
+  if(wc.width!==W*dpr||wc.height!==H*dpr){wc.width=W*dpr;wc.height=H*dpr;}
+  const ctx=wctx;
+  ctx.save(); ctx.scale(dpr,dpr);
+  ctx.fillStyle="#04100a"; ctx.fillRect(0,0,W,H);
+  for(let y=0;y<H;y+=2){ctx.fillStyle="rgba(0,0,0,0.07)";ctx.fillRect(0,y,W,1);}
+  ctx.strokeStyle="rgba(0,255,80,0.04)"; ctx.lineWidth=1;
+  for(let i=1;i<8;i++){ctx.beginPath();ctx.moveTo(W/8*i,0);ctx.lineTo(W/8*i,H);ctx.stroke();}
+  for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(0,H/4*i);ctx.lineTo(W,H/4*i);ctx.stroke();}
+  if(!state.editorId){
+    ctx.fillStyle="#1a3a1a";ctx.font="11px 'Courier New',monospace";
+    ctx.textAlign="center";ctx.fillText("LOAD A SAMPLE TO EDIT",W/2,H/2);
+    ctx.restore();return;
+  }
+  const wave=waves[state.editorId];
+  if(!wave){ctx.restore();return;}
+  const rx1=state.region.start*W,rx2=state.region.end*W;
+  ctx.fillStyle="rgba(255,107,0,0.06)";ctx.fillRect(rx1,0,rx2-rx1,H);
+  const bw=W/wave.length;
+  for(let i=0;i<wave.length;i++){
+    const x=i*bw,t=i/wave.length;
+    const amp=wave[i]*H*0.9,y=(H-amp)/2;
+    const inR=t>=state.region.start&&t<=state.region.end;
+    if(inR){
+      const g=ctx.createLinearGradient(0,y,0,y+amp);
+      g.addColorStop(0,"rgba(255,150,0,0.35)");g.addColorStop(0.5,"rgba(255,100,0,0.98)");g.addColorStop(1,"rgba(255,150,0,0.35)");
+      ctx.fillStyle=g;
+    } else {
+      const br=Math.floor(40+wave[i]*140);ctx.fillStyle=`rgba(0,${br},30,0.55)`;
+    }
+    ctx.fillRect(x,y,Math.max(0.4,bw-0.3),Math.max(1,amp));
+  }
+  ctx.strokeStyle="rgba(0,255,80,0.12)";ctx.lineWidth=1;
+  ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();
+  const marker=(x,lbl,right)=>{
+    ctx.strokeStyle="#ff6b00";ctx.lineWidth=2;ctx.setLineDash([4,3]);
+    ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();ctx.setLineDash([]);
+    const tw=26,th=15,tx=right?x-tw:x;
+    ctx.fillStyle="#ff6b00";ctx.fillRect(tx,0,tw,th);
+    ctx.fillStyle="#000";ctx.font="bold 8px 'Courier New',monospace";
+    ctx.textAlign="center";ctx.fillText(lbl,tx+tw/2,10.5);
+  };
+  marker(rx1," IN",false); marker(rx2,"OUT",true);
+  ctx.restore();
+}
+
+function cPos(e){const r=wc.getBoundingClientRect();return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));}
+wc.addEventListener('mousedown',e=>{
+  if(!state.editorId)return;
+  e.preventDefault();
+  stopPreview(); // region change invalidates paused position
+  const x=cPos(e);
+  state.isDragging=true;state.dragStart=x;state.region={start:x,end:x};
+  drawWaveform();renderWaveReadout();
+});
+wc.addEventListener('mousemove',e=>{
+  if(!state.isDragging)return;
+  const x=cPos(e);
+  state.region={start:Math.min(state.dragStart,x),end:Math.max(state.dragStart,x)};
+  drawWaveform();renderWaveReadout();
+});
+function endDrag(){
+  if(!state.isDragging)return;
+  state.isDragging=false;
+  if(state.region.end-state.region.start<0.005)state.region={start:0,end:1};
+  drawWaveform();renderWaveReadout();
+}
+wc.addEventListener('mouseup',endDrag);
+wc.addEventListener('mouseleave',endDrag);
+new ResizeObserver(()=>{wc.width=0;drawWaveform();}).observe(wc);
+
+// ── Knob ──────────────────────────────────────────────────────────────────────
+class Knob{
+  constructor(canvas,{min,max,value,color='#ff6b00',defaultVal,onChange}){
+    this.c=canvas;this.min=min;this.max=max;this.value=value;
+    this.color=color;this.def=defaultVal??min;this.onChange=onChange||null;
+    const dpr=window.devicePixelRatio||1;
+    this.c.width=44*dpr;this.c.height=44*dpr;
+    this.c.style.width='44px';this.c.style.height='44px';
+    this.draw();this._bind();
+  }
+  draw(){
+    const dpr=window.devicePixelRatio||1;
+    const W=44,H=44,cx=W/2,cy=H/2,r=17;
+    const ctx=this.c.getContext('2d');
+    ctx.save();ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
+    ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=5;ctx.shadowOffsetY=2;
+    ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle='#1e1e1e';ctx.fill();
+    ctx.shadowColor='transparent';
+    const SA=Math.PI*0.75+Math.PI/2,EA=SA+Math.PI*1.5;
+    ctx.beginPath();ctx.arc(cx,cy,r-4,SA,EA);ctx.strokeStyle='#0d0d0d';ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();
+    const t=(this.value-this.min)/(this.max-this.min);
+    const VA=SA+t*Math.PI*1.5;
+    if(t>0.001){ctx.beginPath();ctx.arc(cx,cy,r-4,SA,VA);ctx.strokeStyle=this.color;ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();}
+    const gi=ctx.createRadialGradient(cx-2,cy-2,0,cx,cy,r-8);
+    gi.addColorStop(0,'#383838');gi.addColorStop(1,'#1c1c1c');
+    ctx.beginPath();ctx.arc(cx,cy,r-8,0,Math.PI*2);ctx.fillStyle=gi;ctx.fill();
+    ctx.strokeStyle='#0d0d0d';ctx.lineWidth=1;ctx.stroke();
+    const pa=VA-Math.PI/2,pr=r-13;
+    ctx.beginPath();ctx.arc(cx+pr*Math.cos(pa+Math.PI/2),cy+pr*Math.sin(pa+Math.PI/2),2,0,Math.PI*2);
+    ctx.fillStyle='#fff';ctx.fill();
+    ctx.restore();
+  }
+  _bind(){
+    let sy,sv;
+    const mm=e=>{
+      const dy=sy-e.clientY;
+      this.value=Math.max(this.min,Math.min(this.max,sv+dy/80*(this.max-this.min)));
+      this.draw();this.onChange?.(this.value);
+    };
+    const mu=()=>{window.removeEventListener('mousemove',mm);window.removeEventListener('mouseup',mu);};
+    this.c.addEventListener('mousedown',e=>{sy=e.clientY;sv=this.value;e.preventDefault();window.addEventListener('mousemove',mm);window.addEventListener('mouseup',mu);});
+    this.c.addEventListener('dblclick',()=>{this.value=this.def;this.draw();this.onChange?.(this.value);});
+  }
+}
+
+// ── Renders ───────────────────────────────────────────────────────────────────
+function renderSampleBrowser(){
+  const list=document.getElementById('sampleList');
+  document.getElementById('sCount').textContent=`${state.samples.length} LOADED`;
+  if(!state.samples.length){list.innerHTML='<div class="s-empty">NO SAMPLES</div>';return;}
+  list.innerHTML=state.samples.map(s=>`
+    <div class="s-item${state.editorId===s.id?' active':''}" data-sid="${s.id}">
+      <div>
+        <div class="s-name${state.editorId===s.id?' hi':''}">${s.name}</div>
+        <div class="s-dur">${s.duration.toFixed(2)}s</div>
+      </div>
+      ${state.editorId===s.id?'<span class="s-flag">EDIT ▶</span>':''}
+    </div>
+  `).join('');
+  list.querySelectorAll('.s-item').forEach(el=>el.addEventListener('click',()=>{
+    stopPreview();
+    state.editorId=el.dataset.sid;state.region={start:0,end:1};
+    renderSampleBrowser();renderEditorTitle();drawWaveform();renderWaveReadout();syncPreviewUI();
+  }));
+}
+
+function renderEditorTitle(){
+  const s=state.samples.find(s=>s.id===state.editorId);
+  document.getElementById('edTitle').innerHTML='SAMPLE EDITOR'+(s?` <span style="color:#1a4a1a;margin-left:8px">— ${s.name.substring(0,22)}</span>`:'');
+}
+
+function renderWaveReadout(){
+  const div=document.getElementById('waveReadout');
+  const s=state.samples.find(s=>s.id===state.editorId);
+  if(!s){div.innerHTML='<span class="no-wave">NO SAMPLE LOADED — UPLOAD A FILE TO BEGIN</span>';return;}
+  div.innerHTML=[
+    ['START',fmt(state.region.start*s.duration)],
+    ['END',  fmt(state.region.end  *s.duration)],
+    ['LEN',  `${((state.region.end-state.region.start)*s.duration).toFixed(3)}s`],
+    ['FULL', fmt(s.duration)],
+  ].map(([k,v])=>`<div><div class="rk">${k}</div><div class="rv">${v}</div></div>`).join('');
+}
+
+function renderAssignBtn(){
+  const btn=document.getElementById('assignBtn');
+  const ok=state.selectedPad!==null&&!!state.editorId;
+  btn.className='assign-btn'+(ok?' ready':'');
+  btn.textContent=state.selectedPad!==null?`⬇  ASSIGN CHOP → PAD ${PAD_LABELS[state.selectedPad]}`:'SELECT A PAD BELOW TO ASSIGN CHOP';
+}
+
+function renderArmedCt(){
+  document.getElementById('armedCt').textContent=`${state.pads.filter(p=>p.sampleId).length}/16 PADS ARMED`;
+}
+
+function renderPads(){
+  const grid=document.getElementById('padGrid');
+  if(!grid.children.length){
+    DISPLAY_ORDER.forEach(pi=>{
+      const d=document.createElement('div');
+      d.className='pad';d.dataset.pi=pi;
+      d.addEventListener('mousedown',e=>{
+        e.preventDefault();
+        state.selectedPad=pi; playPad(pi);
+        renderPads();renderInspector();renderAssignBtn();
+      });
+      d.addEventListener('mouseup',()=>stopPad(pi));
+      d.addEventListener('mouseleave',()=>stopPad(pi));
+      grid.appendChild(d);
+    });
+  }
+  DISPLAY_ORDER.forEach((pi,idx)=>{
+    const pad=state.pads[pi];
+    const active=state.activePads.has(pi);
+    const sel=state.selectedPad===pi;
+    const has=!!pad.sampleId;
+    const col=pad.color;
+    const sn=has?(state.samples.find(s=>s.id===pad.sampleId)?.name||''):'';
+    const el=grid.children[idx];
+    el.style.cssText=`
+      aspect-ratio:1;border-radius:8px;
+      background:${active?col:has?'linear-gradient(145deg,#1c2214,#0e0e0e)':'#101010'};
+      border:${sel?`2px solid ${col}`:active?`2px solid ${col}`:has?`1px solid ${col}33`:'1px solid #1c1c1c'};
+      cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:9px;
+      transition:transform .04s,box-shadow .04s,background .04s;
+      transform:${active?'scale(0.92)':'scale(1)'};
+      box-shadow:${active?`0 0 28px ${col}99,inset 0 2px 4px rgba(0,0,0,0.6)`:sel?`0 0 14px ${col}44`:'0 3px 8px rgba(0,0,0,0.7)'};
+      position:relative;overflow:hidden;
+    `;
+    el.innerHTML=`
+      ${active?`<div class="pad-glow" style="background:radial-gradient(circle,${col}30,transparent)"></div>`:''}
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;position:relative">
+        <span style="font-size:9px;font-weight:bold;line-height:1;color:${active?'#000':col}">${pad.label}</span>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+          ${pad.loop?`<span style="color:${active?'rgba(0,0,0,0.6)':'#fff'};font-size:12px;line-height:1">∞</span>`:''}
+          ${has?`<span class="pad-mode-pill ${pad.mode}"style="${active?'opacity:.35':''}">${pad.mode==='shot'?'SHT':'HLD'}</span>`:''}
+        </div>
+      </div>
+      <div style="position:relative">
+        ${sn?`<div style="font-size:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px;color:${active?'rgba(0,0,0,0.65)':'#2e2e2e'}">${sn.substring(0,10)}</div>`:''}
+        <div style="font-size:8px;color:${active?'rgba(0,0,0,0.4)':'#202020'}">${KEY_LABELS[pi]}</div>
+      </div>
+    `;
+  });
+}
+
+function renderInspector(){
+  const pi=state.selectedPad;
+  const titleEl=document.getElementById('inspTitle');
+  const body   =document.getElementById('inspBody');
+  if(pi===null){titleEl.textContent='PAD INSPECTOR';body.innerHTML='<div class="no-sel">SELECT A PAD</div>';return;}
+  const pad=state.pads[pi];
+  titleEl.textContent=`PAD ${pad.label} INSPECTOR`;
+  if(!pad.sampleId){
+    body.innerHTML=`<div class="no-sel">NO SAMPLE ASSIGNED<br><span style="color:#0d0d22;font-size:8px">ASSIGN A CHOP BELOW</span></div>`;
+    return;
+  }
+  const buf=bufs[pad.sampleId];
+  const inT =buf?pad.startRatio*buf.duration:0;
+  const outT=buf?pad.endRatio  *buf.duration:0;
+  const sn  =state.samples.find(s=>s.id===pad.sampleId)?.name||'';
+
+  body.innerHTML=`
+    <div style="color:#3a55aa;font-size:10px;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sn}</div>
+
+    <div style="margin-bottom:8px">
+      <div style="color:#2a2a4a;font-size:7px;letter-spacing:1px;margin-bottom:4px">PLAY MODE</div>
+      <div class="mode-row">
+        <button class="mode-btn${pad.mode==='shot'?' sel-shot':''}" id="mShot">
+          ◆ SHOT<br><span style="font-size:6px;opacity:.65;letter-spacing:0">plays full chop</span>
+        </button>
+        <button class="mode-btn${pad.mode==='hold'?' sel-hold':''}" id="mHold">
+          ◈ HOLD<br><span style="font-size:6px;opacity:.65;letter-spacing:0">sustain while held</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="info-cell"><div class="info-k">IN</div><div class="info-v">${fmt(inT)}</div></div>
+      <div class="info-cell"><div class="info-k">OUT</div><div class="info-v">${fmt(outT)}</div></div>
+      <div class="info-cell"><div class="info-k">LEN</div><div class="info-v">${(outT-inT).toFixed(3)}s</div></div>
+      <div class="info-cell"><div class="info-k">LOOP</div><div class="info-v${pad.loop?' orange':''}">${pad.loop?'ON':'OFF'}</div></div>
+    </div>
+    <div class="inspector-actions">
+      <button class="btn${pad.loop?' on':''}" id="btnLoop">${pad.loop?'∞ LOOP ON':'∞ LOOP OFF'}</button>
+      <button class="btn-clr" id="btnClr">CLEAR</button>
+      <button class="btn-play-sm" id="btnPl">▶</button>
+    </div>
+    <div style="margin-bottom:10px">
+      <div class="vol-lbl" id="vLbl">VOLUME: ${Math.round(pad.volume*100)}%</div>
+      <input type="range" class="vol-sl" id="vSl" min="0" max="1" step="0.01" value="${pad.volume}">
+    </div>
+    <div class="knobs-row" id="kRow"></div>
+  `;
+
+  document.getElementById('mShot').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],mode:'shot'};renderInspector();renderPads();});
+  document.getElementById('mHold').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],mode:'hold'};renderInspector();renderPads();});
+  document.getElementById('btnLoop').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],loop:!state.pads[pi].loop};renderInspector();});
+  document.getElementById('btnClr').addEventListener('click',()=>clearPad(pi));
+  document.getElementById('btnPl').addEventListener('click',()=>playPad(pi));
+  document.getElementById('vSl').addEventListener('input',e=>{
+    state.pads[pi]={...state.pads[pi],volume:+e.target.value};
+    document.getElementById('vLbl').textContent=`VOLUME: ${Math.round(+e.target.value*100)}%`;
+  });
+
+  const knobDefs=[
+    {key:'pitch',  label:'PITCH', min:-24, max:24,  defaultVal:0, color:'#6688ff', fmt:v=>v===0?'0 st':(v>0?'+':'')+v.toFixed(1)+' st'},
+    {key:'attack', label:'ATTK',  min:0,   max:0.5, defaultVal:0, color:'#4dff91', fmt:v=>v<0.002?'0 ms':`${(v*1000).toFixed(0)} ms`},
+    {key:'release',label:'REL',   min:0,   max:2.0, defaultVal:0, color:'#ff5252', fmt:v=>v<0.002?'0 ms':`${(v*1000).toFixed(0)} ms`},
+  ];
+  const kRow=document.getElementById('kRow');
+  knobDefs.forEach(def=>{
+    const wrap=document.createElement('div');wrap.className='knob-wrap';
+    const cnv=document.createElement('canvas');cnv.className='knob-canvas';
+    const lbl=document.createElement('div');lbl.className='knob-lbl';lbl.textContent=def.label;
+    const val=document.createElement('div');val.className='knob-val';val.textContent=def.fmt(pad[def.key]);
+    wrap.append(cnv,lbl,val);kRow.appendChild(wrap);
+    new Knob(cnv,{min:def.min,max:def.max,value:pad[def.key],color:def.color,defaultVal:def.defaultVal,
+      onChange:v=>{state.pads[pi]={...state.pads[pi],[def.key]:v};val.textContent=def.fmt(v);}});
+  });
+}
+
+// ── Keyboard ──────────────────────────────────────────────────────────────────
+window.addEventListener('keydown',e=>{
+  if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;
+  const k=e.key.toLowerCase();
+  if(k in PAD_KEYS&&!pressed.has(k)){pressed.add(k);playPad(PAD_KEYS[k]);}
+});
+window.addEventListener('keyup',e=>{
+  const k=e.key.toLowerCase();
+  if(k in PAD_KEYS){pressed.delete(k);stopPad(PAD_KEYS[k]);}
+});
+
+// ── Event wiring ──────────────────────────────────────────────────────────────
+const uz=document.getElementById('uploadZone');
+uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag-over');});
+uz.addEventListener('dragleave',()=>uz.classList.remove('drag-over'));
+uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag-over');handleUpload(e.dataTransfer.files);});
+document.getElementById('fileInput').addEventListener('change',e=>handleUpload(e.target.files));
+document.getElementById('masterVol').addEventListener('input',e=>{
+  state.masterVol=+e.target.value;
+  if(masterGain)masterGain.gain.value=state.masterVol;
+});
+document.getElementById('btnAll').addEventListener('click',()=>{
+  stopPreview();state.region={start:0,end:1};drawWaveform();renderWaveReadout();
+});
+document.getElementById('btnPlay') .addEventListener('click',playPreview);
+document.getElementById('btnPause').addEventListener('click',pausePreview);
+document.getElementById('btnStop') .addEventListener('click',stopPreview);
+document.getElementById('btnCrop') .addEventListener('click',cropSample);
+document.getElementById('assignBtn').addEventListener('click',assign);
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+renderPads();
+renderInspector();
+renderAssignBtn();
+renderArmedCt();
+drawWaveform();
+renderWaveReadout();
+syncPreviewUI();
+</script>
+</body>
+</html>
