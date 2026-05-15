@@ -2,70 +2,53 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>CHOP-X · MPC Sample Workstation</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:#0a0a0a}
 ::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:2px}
-body{
-  background:#060606;
-  font-family:'Courier New',monospace;
-  user-select:none;
-  min-height:100vh;
-  display:flex;
-  align-items:flex-start;
-  justify-content:center;
-  padding:16px;
-}
-.chassis{
-  background:linear-gradient(160deg,#1d1d1d,#111);
-  border-radius:14px;
-  padding:22px;
-  width:100%;
-  max-width:1060px;
-  box-shadow:0 30px 90px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04),inset 0 -1px 0 rgba(0,0,0,0.6);
-  border:1px solid #272727;
-  position:relative;
-  overflow:hidden;
-}
+body{background:#060606;font-family:'Courier New',monospace;user-select:none;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:16px;}
+.chassis{background:linear-gradient(160deg,#1d1d1d,#111);border-radius:14px;padding:22px;width:100%;max-width:1060px;box-shadow:0 30px 90px rgba(0,0,0,0.95),inset 0 1px 0 rgba(255,255,255,0.04),inset 0 -1px 0 rgba(0,0,0,0.6);border:1px solid #272727;position:relative;overflow:hidden;}
 .rivet{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle at 30% 30%,#3a3a3a,#111);box-shadow:inset 0 1px 1px rgba(255,255,255,0.07);}
 
 /* ── Header ── */
-.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #1c1c1c;flex-wrap:wrap;gap:10px}
+.hdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #1c1c1c;gap:10px;flex-wrap:wrap;}
 .logo{color:#ff6b00;font-size:21px;font-weight:bold;letter-spacing:10px;text-shadow:0 0 24px rgba(255,107,0,0.55)}
 .logo-sub{color:#2a2a2a;font-size:8px;letter-spacing:4px}
-.transport{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.transport{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .bpm-wrap{text-align:right}
 .bpm-lbl,.mvol-lbl{color:#2a2a2a;font-size:7px;letter-spacing:2px}
 .mvol-lbl{margin-bottom:3px}
 #bpmInput{background:transparent;border:none;color:#4dff91;font-size:22px;font-family:'Courier New',monospace;width:58px;text-align:right;outline:none}
-#masterVol{width:90px;accent-color:#ff6b00}
+#masterVol{width:80px;accent-color:#ff6b00}
 .led-grp{display:flex;gap:10px}
 .led-item{display:flex;flex-direction:column;align-items:center;gap:4px}
 .led{width:7px;height:7px;border-radius:50%;background:#1a1a1a}
 .led.on{background:#ff6b00;box-shadow:0 0 8px rgba(255,107,0,0.7)}
 .led-txt{color:#222;font-size:6px;letter-spacing:.5px}
-
-/* ── Session controls ── */
 .sess-btns{display:flex;gap:5px;align-items:center}
-.sess-btn{
-  padding:5px 9px;border-radius:4px;border:1px solid #1e1e2e;
-  background:#0c0c18;color:#3a3a6a;font-size:8px;letter-spacing:1.5px;
-  cursor:pointer;font-family:'Courier New',monospace;transition:all .12s;white-space:nowrap;
-}
+.sess-btn{padding:5px 9px;border-radius:4px;border:1px solid #1e1e2e;background:#0c0c18;color:#3a3a6a;font-size:8px;letter-spacing:1.5px;cursor:pointer;font-family:'Courier New',monospace;transition:all .12s;white-space:nowrap;}
 .sess-btn:hover{background:#141428;color:#6688ff;border-color:#2a2a5a;}
 .sess-btn.export-btn{border-color:#1e2e1e;background:#0c180c;color:#2a4a2a;}
 .sess-btn.export-btn:hover{background:#0f200f;color:#4dff91;border-color:#2a5a2a;}
 .sess-btn.import-btn{border-color:#2e1e1e;background:#180c0c;color:#4a2a2a;}
 .sess-btn.import-btn:hover{background:#200f0f;color:#ff8a65;border-color:#5a2a2a;}
 
+/* ── Transport knobs (Tempo / Pitch) ── */
+.transport-knobs{display:flex;gap:14px;align-items:flex-end;}
+.tknob-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.tknob-lbl{color:#333;font-size:6px;letter-spacing:2px;text-align:center;}
+.tknob-val{color:#ff6b00;font-size:8px;text-align:center;font-family:'Courier New',monospace;min-height:10px;}
+.pitch-val{color:#6688ff!important;}
+
 /* ── Main Grid ── */
 .main-grid{display:grid;grid-template-columns:250px 1fr;gap:18px}
-
-/* ── Left ── */
 .left-panel{display:flex;flex-direction:column;gap:12px}
+.right-col{display:flex;flex-direction:column;gap:13px}
+
+/* ── Upload zone ── */
 .upload-zone{background:#0a0a0a;border:2px dashed #222;border-radius:7px;padding:16px 10px;text-align:center;cursor:pointer;display:block;transition:all .18s}
 .upload-zone.drag-over{background:#0d1a0d;border-color:#ff6b00}
 .upload-icon{font-size:22px;color:#333;margin-bottom:5px;transition:color .2s}
@@ -79,8 +62,6 @@ body{
 .lcd-hdr{padding:6px 12px;background:#060e06;border-bottom:1px solid #0d2010;display:flex;justify-content:space-between;align-items:center;gap:8px}
 .lcd-title{color:#4dff91;font-size:8px;letter-spacing:2.5px;white-space:nowrap}
 .lcd-dim{color:#1a3a1a;font-size:8px}
-
-/* Sample list */
 .s-list{max-height:140px;overflow-y:auto}
 .s-item{padding:7px 11px;cursor:pointer;border-bottom:1px solid #0a1408;display:flex;justify-content:space-between;align-items:center;transition:background .1s}
 .s-item:hover{background:#0a1808}
@@ -104,8 +85,6 @@ body{
 .info-k{color:#2a2a4a;font-size:7px}
 .info-v{color:#6688ff;font-size:9px}
 .info-v.orange{color:#ff6b00}
-
-/* Buttons */
 .btn{padding:5px 10px;border-radius:4px;border:none;background:#141414;color:#666;font-size:8px;letter-spacing:1.5px;cursor:pointer;font-family:'Courier New',monospace;transition:all .1s}
 .btn:hover:not(:disabled){background:#1e1e1e;color:#888}
 .btn.on{background:#ff6b00;color:#000}
@@ -113,25 +92,23 @@ body{
 .btn-clr{padding:5px 8px;border-radius:4px;border:1px solid #2a1a1a;background:#120909;color:#ff4444;font-size:8px;cursor:pointer;font-family:'Courier New',monospace}
 .btn-play-sm{padding:5px 8px;border-radius:4px;border:none;background:#142014;color:#4dff91;font-size:8px;cursor:pointer;font-family:'Courier New',monospace}
 
-/* ── Preview transport ── */
+/* Preview transport */
 .prev-transport{display:flex;gap:3px;align-items:center}
 .prev-dot{width:5px;height:5px;border-radius:50%;background:#122012;flex-shrink:0;transition:background .15s,box-shadow .15s;margin-right:1px}
 .prev-dot.playing{background:#4dff91;box-shadow:0 0 5px rgba(77,255,145,0.7)}
 .prev-dot.paused{background:#ffca28;box-shadow:0 0 5px rgba(255,202,40,0.5);animation:blink .9s step-end infinite}
-@keyframes blink{50%{opacity:0.15}}
+@keyframes blink{50%{opacity:.15}}
 .prev-btn{padding:3px 7px;border-radius:3px;border:1px solid #0d200d;background:#060e06;color:#1d3a1d;font-size:9px;line-height:1;cursor:pointer;font-family:'Courier New',monospace;transition:all .1s;}
 .prev-btn:hover:not(:disabled){background:#0b1c0b;color:#3dcc73;border-color:#164a16}
 .prev-btn.is-playing{background:#0a1e0a;color:#4dff91;border-color:#1a5a1a}
 .prev-btn.is-paused-resume{background:#18180a;color:#ffca28;border-color:#3a3a10}
 .prev-btn:disabled{color:#0e1e0e;cursor:default;border-color:#080e08;background:#050905}
 
-/* ── Mode toggle ── */
+/* Mode toggle */
 .mode-row{display:flex;gap:4px;margin-bottom:9px}
 .mode-btn{flex:1;padding:6px 4px;border-radius:4px;border:1px solid #141420;background:#0c0c18;color:#252540;font-size:8px;letter-spacing:.5px;cursor:pointer;font-family:'Courier New',monospace;text-align:center;transition:all .12s;line-height:1.5;}
 .mode-btn.sel-shot{background:#1a1a08;color:#ffca28;border-color:#38381a;box-shadow:0 0 10px rgba(255,202,40,0.12)}
 .mode-btn.sel-hold{background:#081818;color:#26c6da;border-color:#123232;box-shadow:0 0 10px rgba(38,198,218,0.12)}
-
-/* Inspector actions */
 .inspector-actions{display:flex;gap:5px;margin-bottom:7px}
 .vol-lbl{color:#2a2a4a;font-size:7px;margin-bottom:3px}
 .vol-sl{width:100%;accent-color:#6688ff}
@@ -143,9 +120,31 @@ body{
 .knob-lbl{color:#2a2a4a;font-size:6px;letter-spacing:1px;text-align:center}
 .knob-val{color:#888;font-size:7px;text-align:center;font-family:'Courier New',monospace;min-height:10px}
 
-/* Right panel */
-.right-panel{display:flex;flex-direction:column;gap:13px}
-#waveCanvas{display:block;width:100%;height:130px;cursor:crosshair}
+/* ── Editor toolbar (zoom + autochop) ── */
+.editor-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:6px 12px;background:#060e06;border-bottom:1px solid #0d2010;}
+.zoom-btns{display:flex;gap:3px;}
+.zbtn{padding:3px 7px;border-radius:3px;border:1px solid #0d200d;background:#060e06;color:#2a5a2a;font-size:9px;cursor:pointer;font-family:'Courier New',monospace;transition:all .1s;line-height:1;}
+.zbtn:hover{color:#4dff91;border-color:#1a5a1a;background:#0a1e0a;}
+.zbtn.active{background:#0f2010;color:#4dff91;border-color:#1a5a1a;}
+.zoom-level{color:#1a3a1a;font-size:8px;letter-spacing:1px;min-width:36px;text-align:center;}
+.toolbar-sep{width:1px;height:18px;background:#0d2010;}
+.autochop-wrap{display:flex;align-items:center;gap:8px;margin-left:auto;}
+.autochop-knob-group{display:flex;flex-direction:column;align-items:center;gap:1px;}
+.autochop-lbl{color:#333;font-size:6px;letter-spacing:1.5px;}
+.autochop-val{color:#ff6b00;font-size:8px;font-family:'Courier New',monospace;}
+.btn-autochop{padding:6px 12px;border-radius:4px;border:1px solid #3a1a00;background:#1a0e00;color:#ff6b00;font-size:8px;letter-spacing:1.5px;cursor:pointer;font-family:'Courier New',monospace;transition:all .15s;white-space:nowrap;}
+.btn-autochop:hover{background:#240f00;color:#ff9a30;border-color:#5a2a00;box-shadow:0 0 10px rgba(255,107,0,0.2);}
+.btn-autochop:disabled{opacity:.3;cursor:default;}
+.chop-mode-sel{display:flex;gap:3px;}
+.chop-mode-btn{padding:3px 6px;border-radius:3px;border:1px solid #1a0e00;background:#100900;color:#3a2010;font-size:7px;cursor:pointer;font-family:'Courier New',monospace;transition:all .1s;}
+.chop-mode-btn.active{background:#1a0e00;color:#ff6b00;border-color:#3a1a00;}
+
+/* Zoom overview bar */
+.zoom-overview{height:10px;background:#020a02;border-top:1px solid #0d2010;position:relative;cursor:pointer;}
+.zoom-thumb{position:absolute;top:0;bottom:0;background:rgba(77,255,145,0.08);border-left:1px solid rgba(77,255,145,0.2);border-right:1px solid rgba(77,255,145,0.2);}
+
+/* Wave canvas */
+#waveCanvas{display:block;width:100%;height:130px;cursor:crosshair;touch-action:none;}
 #waveCanvas.no-sample{cursor:default}
 .wave-readout{padding:6px 12px;background:#060e06;border-top:1px solid #0d2010;display:flex;gap:22px;flex-wrap:wrap;align-items:center}
 .rk{color:#1a3a1a;font-size:7px}
@@ -158,10 +157,7 @@ body{
 
 /* Pads */
 .pad-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-.pad{aspect-ratio:1;border-radius:8px;background:#101010;border:1px solid #1c1c1c;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:9px;transition:transform .04s,box-shadow .04s,background .04s;position:relative;overflow:hidden}
-.pad-lbl{font-size:9px;font-weight:bold;line-height:1}
-.pad-sname{font-size:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
-.pad-key{font-size:8px}
+.pad{aspect-ratio:1;border-radius:8px;background:#101010;border:1px solid #1c1c1c;cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:9px;transition:transform .04s,box-shadow .04s,background .04s;position:relative;overflow:hidden;touch-action:none;}
 .pad-glow{position:absolute;inset:0;pointer-events:none;border-radius:8px}
 .pad-mode-pill{font-size:6px;letter-spacing:.5px;padding:1px 3px;border-radius:2px;line-height:1.4}
 .pad-mode-pill.shot{color:#ffca28;background:rgba(255,202,40,0.07);border:1px solid rgba(255,202,40,0.18)}
@@ -172,74 +168,129 @@ body{
 .foot-help{color:#252525;font-size:8px;letter-spacing:1px}
 .foot-armed{color:#1a3a1a;font-size:8px}
 
-/* ── Speed Dial ── */
+/* Speed Dial */
 .speed-dial{margin-top:14px;background:#060610;border:1px solid #12122a;border-radius:8px;overflow:hidden}
-.sd-hdr{
-  padding:8px 14px;background:#08080f;border-bottom:1px solid #12122a;
-  display:flex;justify-content:space-between;align-items:center;cursor:pointer;
-  transition:background .12s;
-}
+.sd-hdr{padding:8px 14px;background:#08080f;border-bottom:1px solid #12122a;display:flex;justify-content:space-between;align-items:center;cursor:pointer;transition:background .12s;}
 .sd-hdr:hover{background:#0c0c16}
 .sd-title{color:#4a5aaa;font-size:8px;letter-spacing:3px;display:flex;align-items:center;gap:8px}
 .sd-title-icon{font-size:10px}
 .sd-toggle{color:#1e1e3e;font-size:8px;letter-spacing:1px}
 .sd-body{padding:12px}
 .sd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.sd-slot{
-  background:#0a0a18;border:1px solid #14142a;border-radius:5px;
-  padding:8px;display:flex;flex-direction:column;gap:4px;min-height:68px;
-  transition:border-color .12s;
-}
+.sd-slot{background:#0a0a18;border:1px solid #14142a;border-radius:5px;padding:8px;display:flex;flex-direction:column;gap:4px;min-height:68px;transition:border-color .12s;}
 .sd-slot.has-data{border-color:#1e1e3a;}
 .sd-slot.has-data:hover{border-color:#2a2a5a;}
 .sd-slot-num{color:#151530;font-size:7px;letter-spacing:1px}
 .sd-slot-name{color:#5568cc;font-size:9px;letter-spacing:.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:bold}
 .sd-slot-meta{color:#1a1a38;font-size:7px;letter-spacing:.5px}
 .sd-slot-actions{display:flex;gap:3px;margin-top:auto}
-.sd-btn{
-  padding:3px 6px;border:none;border-radius:3px;
-  font-size:7px;letter-spacing:.5px;cursor:pointer;
-  font-family:'Courier New',monospace;transition:all .1s;
-}
+.sd-btn{padding:3px 6px;border:none;border-radius:3px;font-size:7px;letter-spacing:.5px;cursor:pointer;font-family:'Courier New',monospace;transition:all .1s;}
 .sd-btn-load{flex:1;background:#12122a;color:#4466ee;border:1px solid #1e1e3a;}
 .sd-btn-load:hover{background:#18183a;color:#6688ff;}
 .sd-btn-save{background:#181808;color:#666620;border:1px solid #282810;}
 .sd-btn-save:hover{background:#222208;color:#aaaa20;}
 .sd-btn-clear{background:#180808;color:#662020;border:1px solid #281010;}
 .sd-btn-clear:hover{background:#220a0a;color:#ff4444;}
-.sd-empty-save{
-  width:100%;padding:5px;border:1px dashed #14142a;border-radius:3px;
-  background:transparent;color:#1e1e3a;font-size:7px;cursor:pointer;
-  font-family:'Courier New',monospace;letter-spacing:.5px;
-  transition:all .12s;margin-top:auto;
-}
+.sd-empty-save{width:100%;padding:5px;border:1px dashed #14142a;border-radius:3px;background:transparent;color:#1e1e3a;font-size:7px;cursor:pointer;font-family:'Courier New',monospace;letter-spacing:.5px;transition:all .12s;margin-top:auto;}
 .sd-empty-save:hover{border-color:#2a2a5a;color:#4444aa;}
 .sd-pips{display:flex;flex-wrap:wrap;gap:2px;margin-top:2px}
 .sd-pip{width:5px;height:5px;border-radius:1px;opacity:.7}
 .sd-hint{color:#111128;font-size:7px;letter-spacing:1px;text-align:center;padding:4px 0 0}
 
-/* ── Toast ── */
-#toastMsg{
-  position:fixed;bottom:28px;left:50%;transform:translateX(-50%);
-  background:#0e0e18;border:1px solid #2a2a4a;
-  font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;
-  padding:9px 22px;border-radius:5px;z-index:9999;
-  transition:opacity .35s;pointer-events:none;opacity:0;
-  box-shadow:0 8px 32px rgba(0,0,0,0.7);
-  white-space:nowrap;
-}
+/* Toast */
+#toastMsg{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0e0e18;border:1px solid #2a2a4a;font-family:'Courier New',monospace;font-size:9px;letter-spacing:2px;padding:9px 22px;border-radius:5px;z-index:9999;transition:opacity .35s;pointer-events:none;opacity:0;box-shadow:0 8px 32px rgba(0,0,0,0.7);white-space:nowrap;}
 
-/* ── Progress overlay ── */
-#progressOverlay{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);
-  z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:14px;
-}
+/* Progress overlay */
+#progressOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:9998;align-items:center;justify-content:center;flex-direction:column;gap:14px;}
 #progressOverlay.visible{display:flex;}
 .prog-box{background:#0e0e18;border:1px solid #2a2a4a;border-radius:8px;padding:24px 36px;text-align:center}
 .prog-title{color:#6688ff;font-size:10px;letter-spacing:3px;margin-bottom:12px}
 .prog-bar-wrap{width:260px;height:4px;background:#14142a;border-radius:2px;overflow:hidden}
 .prog-bar{height:100%;background:#6688ff;border-radius:2px;transition:width .1s;width:0%}
 .prog-msg{color:#3a3a6a;font-size:8px;letter-spacing:1px;margin-top:8px}
+
+/* ── MOBILE NAV ── */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;height:62px;background:#0a0a0a;border-top:1px solid #222;z-index:200;align-items:stretch;}
+.mob-tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:transparent;border:none;cursor:pointer;padding:8px 4px 12px;transition:all .15s;-webkit-tap-highlight-color:transparent;}
+.mob-tab-btn .tab-icon{font-size:20px;line-height:1;transition:transform .15s;}
+.mob-tab-btn .tab-lbl{font-family:'Courier New',monospace;font-size:7px;letter-spacing:1.5px;color:#333;}
+.mob-tab-btn.active .tab-lbl{color:#ff6b00;}
+.mob-tab-btn.active .tab-icon{transform:scale(1.1);}
+.mob-tab-btn.active{border-top:2px solid #ff6b00;}
+
+/* Selected pad mini-info bar (mobile pads tab) */
+.pad-mini-bar{display:none;background:#0c0c14;border:1px solid #18183a;border-radius:6px;padding:8px 12px;margin-bottom:8px;align-items:center;gap:10px;flex-wrap:wrap;}
+.pmb-label{color:#6688ff;font-size:10px;font-weight:bold;}
+.pmb-name{color:#3a3a5a;font-size:9px;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pmb-btns{display:flex;gap:5px;}
+.pmb-btn{padding:4px 8px;border-radius:3px;border:1px solid #1a1a3a;background:#0c0c1e;color:#4466cc;font-size:8px;cursor:pointer;font-family:'Courier New',monospace;}
+.pmb-btn.on{background:#ff6b00;color:#000;border-color:#ff6b00;}
+
+/* ── MEDIA: MOBILE (<768px) ── */
+@media (max-width: 767px) {
+  body{padding:0;}
+  .chassis{border-radius:0;padding:10px 10px 72px;min-height:100vh;max-width:100%;}
+  .rivet{display:none;}
+
+  /* Header compact */
+  .hdr{gap:6px;margin-bottom:12px;padding-bottom:10px;}
+  .logo{font-size:16px;letter-spacing:5px;}
+  .logo-sub{font-size:7px;letter-spacing:2px;}
+  .transport{gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap;padding-bottom:2px;}
+  .transport-knobs{gap:8px;}
+  .tknob-wrap canvas{width:38px!important;height:38px!important;}
+  .led-grp{display:none;}
+  #masterVol{width:70px;}
+  #bpmInput{font-size:18px;width:50px;}
+  .sess-btns{flex-shrink:0;}
+
+  /* Main grid: single column, tabs control visibility */
+  .main-grid{grid-template-columns:1fr;gap:0;}
+  .right-col{gap:0;}
+
+  /* Tab-panel logic */
+  .mob-panel{display:none!important;}
+  .mob-panel.mob-active{display:flex!important;flex-direction:column;gap:10px;}
+
+  /* Show nav */
+  .mob-nav{display:flex;}
+
+  /* Speed dial hide on mobile */
+  .speed-dial{display:none;}
+
+  /* Footer compact */
+  .footer{display:none;}
+
+  /* Editor toolbar compact */
+  .editor-toolbar{padding:5px 8px;gap:4px;flex-wrap:wrap;}
+  .autochop-wrap{margin-left:0;width:100%;justify-content:flex-end;}
+
+  /* Canvas larger on mobile */
+  #waveCanvas{height:160px;}
+
+  /* Pads larger touch areas */
+  .pad{padding:7px;}
+  .pad-grid{gap:5px;}
+
+  /* Bigger knobs in inspector on mobile */
+  .knob-canvas{width:48px!important;height:48px!important;}
+
+  /* Sample browser taller */
+  .s-list{max-height:200px;}
+
+  /* Show pad mini bar */
+  .pad-mini-bar{display:flex;}
+
+  /* Sd grid 2 col */
+  .sd-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+@media (max-width: 400px) {
+  .logo{font-size:13px;letter-spacing:3px;}
+  .transport-knobs{gap:5px;}
+  .autochop-wrap{gap:5px;}
+  .btn-autochop{padding:5px 8px;font-size:7px;}
+}
 </style>
 </head>
 <body>
@@ -259,13 +310,27 @@ body{
   <div class="rivet" style="bottom:10px;left:18px"></div>
   <div class="rivet" style="bottom:10px;right:30px"></div>
 
-  <!-- Header -->
+  <!-- ── Header ── -->
   <div class="hdr">
     <div>
       <div class="logo">CHOP-X</div>
       <div class="logo-sub">MPC SAMPLE WORKSTATION</div>
     </div>
     <div class="transport">
+      <!-- Tempo + Pitch knobs -->
+      <div class="transport-knobs">
+        <div class="tknob-wrap">
+          <canvas id="tempoKnob" class="knob-canvas" style="touch-action:none;cursor:ns-resize;"></canvas>
+          <div class="tknob-lbl">TEMPO</div>
+          <div class="tknob-val" id="tempoVal">120</div>
+        </div>
+        <div class="tknob-wrap">
+          <canvas id="masterPitchKnob" class="knob-canvas" style="touch-action:none;cursor:ns-resize;"></canvas>
+          <div class="tknob-lbl">PITCH</div>
+          <div class="tknob-val pitch-val" id="masterPitchVal">0 st</div>
+        </div>
+      </div>
+      <div class="toolbar-sep" style="height:40px;margin:0 4px;"></div>
       <div class="bpm-wrap">
         <div class="bpm-lbl">BPM</div>
         <input type="number" id="bpmInput" value="120" min="40" max="300">
@@ -279,10 +344,9 @@ body{
         <div class="led-item"><div class="led"></div><div class="led-txt">OVR</div></div>
         <div class="led-item"><div class="led on"></div><div class="led-txt">BANK</div></div>
       </div>
-      <!-- Session controls -->
       <div class="sess-btns">
-        <button class="sess-btn export-btn" onclick="exportSession()" title="Export full session as .chopx file (audio embedded)">⬇ EXPORT</button>
-        <label class="sess-btn import-btn" style="cursor:pointer" title="Import a .chopx session file">
+        <button class="sess-btn export-btn" onclick="exportSession()">⬇ EXPORT</button>
+        <label class="sess-btn import-btn" style="cursor:pointer">
           ⬆ IMPORT
           <input type="file" accept=".chopx,.json" onchange="importSession(this)" style="display:none">
         </label>
@@ -290,10 +354,11 @@ body{
     </div>
   </div>
 
-  <!-- Main -->
+  <!-- ── Main Grid ── -->
   <div class="main-grid">
-    <!-- Left panel -->
-    <div class="left-panel">
+
+    <!-- ── LEFT PANEL / LIBRARY TAB ── -->
+    <div class="left-panel mob-panel" id="panelLibrary">
       <label class="upload-zone" id="uploadZone">
         <div class="upload-icon" id="uploadIcon">⬆</div>
         <div class="upload-lbl" id="uploadLbl">DROP SAMPLES</div>
@@ -315,56 +380,120 @@ body{
       </div>
     </div>
 
-    <!-- Right panel -->
-    <div class="right-panel">
-      <div class="lcd">
-        <div class="lcd-hdr">
-          <span class="lcd-title" id="edTitle">SAMPLE EDITOR</span>
-          <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
-            <button class="btn" id="btnAll" style="white-space:nowrap">ALL</button>
-            <div class="prev-transport">
-              <div class="prev-dot" id="prevDot"></div>
-              <button class="prev-btn" id="btnPlay"  title="Play preview"  disabled>▶</button>
-              <button class="prev-btn" id="btnPause" title="Pause preview" disabled>⏸</button>
-              <button class="prev-btn" id="btnStop"  title="Stop preview"  disabled>■</button>
+    <!-- ── RIGHT COLUMN ── -->
+    <div class="right-col">
+
+      <!-- ── STUDIO TAB ── -->
+      <div class="mob-panel" id="panelStudio">
+        <!-- Waveform editor -->
+        <div class="lcd">
+          <div class="lcd-hdr">
+            <span class="lcd-title" id="edTitle">SAMPLE EDITOR</span>
+            <div style="display:flex;gap:5px;align-items:center;flex-shrink:0">
+              <button class="btn" id="btnAll" style="white-space:nowrap">ALL</button>
+              <div class="prev-transport">
+                <div class="prev-dot" id="prevDot"></div>
+                <button class="prev-btn" id="btnPlay"  disabled>▶</button>
+                <button class="prev-btn" id="btnPause" disabled>⏸</button>
+                <button class="prev-btn" id="btnStop"  disabled>■</button>
+              </div>
+              <button class="btn" id="btnCrop" style="white-space:nowrap">✂ CROP</button>
             </div>
-            <button class="btn" id="btnCrop" style="white-space:nowrap">✂ CROP</button>
+          </div>
+
+          <!-- Zoom + AutoChop toolbar -->
+          <div class="editor-toolbar">
+            <div class="zoom-btns">
+              <button class="zbtn" id="btnZoomIn" title="Zoom in (scroll up)">🔍+</button>
+              <button class="zbtn" id="btnZoomOut" title="Zoom out (scroll down)">🔍−</button>
+              <button class="zbtn" id="btnZoomFit" title="Fit entire sample">FIT</button>
+            </div>
+            <span class="zoom-level" id="zoomPct">100%</span>
+            <div class="toolbar-sep"></div>
+            <!-- AutoChop controls -->
+            <div class="autochop-wrap">
+              <div class="chop-mode-sel">
+                <button class="chop-mode-btn active" id="chopModeEven" title="Equal division">EVEN</button>
+                <button class="chop-mode-btn" id="chopModeTrans" title="Transient detect">TRANS</button>
+              </div>
+              <div class="autochop-knob-group">
+                <canvas id="chopCountKnob" class="knob-canvas" style="touch-action:none;cursor:ns-resize;"></canvas>
+                <div class="autochop-lbl">CHOPS</div>
+                <div class="autochop-val" id="chopCountVal">8</div>
+              </div>
+              <button class="btn-autochop" id="btnAutoChop" disabled>⚡ AUTO CHOP</button>
+            </div>
+          </div>
+
+          <canvas id="waveCanvas" class="no-sample"></canvas>
+          <!-- Zoom overview bar -->
+          <div class="zoom-overview" id="zoomOverview">
+            <div class="zoom-thumb" id="zoomThumb"></div>
+          </div>
+          <div class="wave-readout" id="waveReadout">
+            <span class="no-wave">NO SAMPLE LOADED — UPLOAD A FILE TO BEGIN</span>
           </div>
         </div>
-        <canvas id="waveCanvas" class="no-sample"></canvas>
-        <div class="wave-readout" id="waveReadout">
-          <span class="no-wave">NO SAMPLE LOADED — UPLOAD A FILE TO BEGIN</span>
-        </div>
-      </div>
 
-      <button class="assign-btn" id="assignBtn">SELECT A PAD BELOW TO ASSIGN CHOP</button>
-      <div class="pad-grid" id="padGrid"></div>
-    </div>
-  </div>
+        <button class="assign-btn" id="assignBtn">SELECT A PAD BELOW TO ASSIGN CHOP</button>
+      </div><!-- /panelStudio -->
+
+      <!-- ── PADS TAB ── -->
+      <div class="mob-panel" id="panelPads">
+        <!-- Mini selected-pad bar (mobile only) -->
+        <div class="pad-mini-bar" id="padMiniBar">
+          <span class="pmb-label" id="pmbLabel">—</span>
+          <span class="pmb-name" id="pmbName">no pad selected</span>
+          <div class="pmb-btns">
+            <button class="pmb-btn" id="pmbPlay">▶</button>
+            <button class="pmb-btn" id="pmbLoop">∞</button>
+            <button class="pmb-btn" id="pmbMode">SHT</button>
+          </div>
+        </div>
+        <div class="pad-grid" id="padGrid"></div>
+      </div><!-- /panelPads -->
+
+    </div><!-- /right-col -->
+  </div><!-- /main-grid -->
 
   <div class="footer">
-    <div class="foot-help">KEYS: Z–V · A–F · Q–R · 1–4 &nbsp;|&nbsp; DRAG WAVEFORM = SET CHOP REGION &nbsp;|&nbsp; SHOT = full chop on tap &nbsp;|&nbsp; HOLD = sustain while pressed &nbsp;|&nbsp; DBL-CLICK KNOB = RESET</div>
+    <div class="foot-help">KEYS: Z–V · A–F · Q–R · 1–4 &nbsp;|&nbsp; DRAG WAVEFORM = REGION · SCROLL = ZOOM · SHIFT+DRAG = PAN &nbsp;|&nbsp; DBL-CLICK KNOB = RESET &nbsp;|&nbsp; LOOP TAPS TO TOGGLE</div>
     <div class="foot-armed" id="armedCt">0/16 PADS ARMED</div>
   </div>
 
   <!-- Speed Dial -->
   <div class="speed-dial">
-    <div class="sd-hdr" onclick="toggleSpeedDial()" id="sdHdr">
+    <div class="sd-hdr" onclick="toggleSpeedDial()">
       <div class="sd-title"><span class="sd-title-icon">⚡</span>SPEED DIAL &nbsp;<span style="color:#1a1a32;font-size:7px">SAVED KITS · CLICK TO EXPAND</span></div>
       <div class="sd-toggle" id="sdToggle">▼ SHOW</div>
     </div>
     <div id="sdBody" style="display:none">
       <div class="sd-body">
         <div class="sd-grid" id="sdGrid"></div>
-        <div class="sd-hint" id="sdHint">SAVES PAD LAYOUT &amp; CHOP SETTINGS · AUDIO MATCHED BY FILENAME · USE EXPORT FOR FULL PORTABILITY</div>
+        <div class="sd-hint">SAVES PAD LAYOUT &amp; CHOP SETTINGS · AUDIO MATCHED BY FILENAME</div>
       </div>
     </div>
   </div>
+</div><!-- /chassis -->
 
-</div>
+<!-- Mobile bottom nav -->
+<nav class="mob-nav">
+  <button class="mob-tab-btn" data-tab="Library" onclick="setMobTab('Library')">
+    <span class="tab-icon">📂</span>
+    <span class="tab-lbl">LIBRARY</span>
+  </button>
+  <button class="mob-tab-btn" data-tab="Studio" onclick="setMobTab('Studio')">
+    <span class="tab-icon">🌊</span>
+    <span class="tab-lbl">STUDIO</span>
+  </button>
+  <button class="mob-tab-btn active" data-tab="Pads" onclick="setMobTab('Pads')">
+    <span class="tab-icon">🥁</span>
+    <span class="tab-lbl">PADS</span>
+  </button>
+</nav>
 
 <script>
-// ── Constants ─────────────────────────────────────────────────────────────────
+// ── Constants ──────────────────────────────────────────────────────────────────
 const PAD_KEYS  = {z:0,x:1,c:2,v:3,a:4,s:5,d:6,f:7,q:8,w:9,e:10,r:11,"1":12,"2":13,"3":14,"4":15};
 const PAD_LABELS= ["A1","A2","A3","A4","B1","B2","B3","B4","C1","C2","C3","C4","D1","D2","D3","D4"];
 const KEY_LABELS= ["Z","X","C","V","A","S","D","F","Q","W","E","R","1","2","3","4"];
@@ -375,36 +504,39 @@ const PAD_COLORS= [
   "#ff6b00","#a5d6a7","#ce93d8","#f48fb1",
 ];
 const DISPLAY_ORDER=[12,13,14,15,8,9,10,11,4,5,6,7,0,1,2,3];
+const fmt=s=>{if(isNaN(s)||s==null)return"00:00.000";const m=Math.floor(s/60).toString().padStart(2,"0");return`${m}:${(s%60).toFixed(3).padStart(6,"0")}`;};
 
-const fmt=s=>{
-  if(isNaN(s)||s==null) return "00:00.000";
-  const m=Math.floor(s/60).toString().padStart(2,"0");
-  return `${m}:${(s%60).toFixed(3).padStart(6,"0")}`;
-};
-
-// ── State ─────────────────────────────────────────────────────────────────────
+// ── State ──────────────────────────────────────────────────────────────────────
 const state={
   samples:[],
-  pads: Array.from({length:16},(_,i)=>({
-    id:i, label:PAD_LABELS[i], color:PAD_COLORS[i],
-    sampleId:null, startRatio:0, endRatio:1,
-    loop:false, volume:0.9, pitch:0, attack:0, release:0,
-    mode:'shot',
+  pads:Array.from({length:16},(_,i)=>({
+    id:i,label:PAD_LABELS[i],color:PAD_COLORS[i],
+    sampleId:null,startRatio:0,endRatio:1,
+    loop:false,volume:0.9,pitch:0,attack:0,release:0,mode:'shot',
   })),
   selectedPad:null,
   editorId:null,
   activePads:new Set(),
   region:{start:0,end:1},
+  zoom:{start:0,end:1},
   masterVol:0.8,
+  masterPitch:0,
+  tempo:120,
+  autoChopCount:8,
+  chopMode:'even', // 'even' | 'trans'
+  chopPoints:[],
   isDragging:false,
   dragStart:0,
+  isPanning:false,
+  panStartZoom:null,
+  panStartX:0,
   prevStatus:'stopped',
   prevOffset:0,
   prevCtxStartTime:0,
   prevRegionDur:0,
 };
 
-// ── Audio ─────────────────────────────────────────────────────────────────────
+// ── Audio ──────────────────────────────────────────────────────────────────────
 let audioCtx=null, masterGain=null;
 const bufs={}, waves={}, srcs={}, gainNodes={};
 const pressed=new Set();
@@ -416,11 +548,11 @@ function getCtx(){
     masterGain.gain.value=state.masterVol;
     masterGain.connect(audioCtx.destination);
   }
-  if(audioCtx.state==="suspended") audioCtx.resume();
+  if(audioCtx.state==='suspended')audioCtx.resume();
   return audioCtx;
 }
 
-function buildWave(buf,n=1600){
+function buildWave(buf,n=2400){
   const ch=buf.getChannelData(0);
   const spp=Math.max(1,Math.floor(ch.length/n));
   const out=new Float32Array(n);
@@ -439,50 +571,52 @@ async function loadFile(file){
     const buf=await ctx.decodeAudioData(ab);
     const id=`s${Date.now()}${Math.random().toString(36).slice(2,5)}`;
     bufs[id]=buf; waves[id]=buildWave(buf);
-    return {id,name:file.name.replace(/\.[^.]+$/,""),duration:buf.duration};
+    return {id,name:file.name.replace(/\.[^.]+$/,''),duration:buf.duration};
   }catch{return null;}
 }
 
 async function handleUpload(files){
   const icon=document.getElementById('uploadIcon');
-  const lbl =document.getElementById('uploadLbl');
-  icon.textContent="⟳"; icon.className="upload-icon spin"; lbl.textContent="DECODING...";
-  const audio=Array.from(files).filter(f=>f.type.startsWith("audio/")||/\.(mp3|wav|ogg|flac|aac|m4a)$/i.test(f.name));
+  const lbl=document.getElementById('uploadLbl');
+  icon.textContent='⟳'; icon.className='upload-icon spin'; lbl.textContent='DECODING...';
+  const audio=Array.from(files).filter(f=>f.type.startsWith('audio/')||/\.(mp3|wav|ogg|flac|aac|m4a)$/i.test(f.name));
   const loaded=(await Promise.all(audio.map(loadFile))).filter(Boolean);
   state.samples.push(...loaded);
-  if(loaded.length&&!state.editorId){state.editorId=loaded[0].id;state.region={start:0,end:1};}
-  icon.textContent="⬆"; icon.className="upload-icon"; lbl.textContent="DROP SAMPLES";
+  if(loaded.length&&!state.editorId){
+    state.editorId=loaded[0].id; state.region={start:0,end:1}; state.zoom={start:0,end:1};
+  }
+  icon.textContent='⬆'; icon.className='upload-icon'; lbl.textContent='DROP SAMPLES';
+  document.getElementById('btnAutoChop').disabled=!state.editorId;
   renderSampleBrowser(); renderEditorTitle(); drawWaveform(); renderWaveReadout(); syncPreviewUI();
+  if(loaded.length&&window.innerWidth<768) setMobTab('Studio');
 }
 
-// ── Pad Play / Stop ───────────────────────────────────────────────────────────
+// ── Pad Play / Stop ────────────────────────────────────────────────────────────
 function playPad(padId){
   const pad=state.pads[padId];
-  if(!pad?.sampleId) return;
+  if(!pad?.sampleId)return;
   const ctx=getCtx();
   const buf=bufs[pad.sampleId];
-  if(!buf) return;
+  if(!buf)return;
   try{srcs[padId]?.stop();}catch{}
   const gn=ctx.createGain();
   gn.connect(masterGain);
   gainNodes[padId]=gn;
   const src=ctx.createBufferSource();
-  src.buffer=buf;
-  src.connect(gn);
+  src.buffer=buf; src.connect(gn);
   const rate=Math.pow(2,pad.pitch/12);
   src.playbackRate.value=rate;
-  const s   =pad.startRatio*buf.duration;
-  const e   =pad.endRatio  *buf.duration;
-  const dur =Math.max(0.002,e-s);
+  const s=pad.startRatio*buf.duration;
+  const e=pad.endRatio*buf.duration;
+  const dur=Math.max(0.002,e-s);
   const wallDur=dur/rate;
-  const now =ctx.currentTime;
-  const atk =Math.max(0.002,pad.attack||0.002);
-  const rel =pad.release||0;
+  const now=ctx.currentTime;
+  const atk=Math.max(0.002,pad.attack||0.002);
+  const rel=pad.release||0;
   gn.gain.setValueAtTime(0,now);
   gn.gain.linearRampToValueAtTime(pad.volume,now+atk);
   if(pad.loop){
-    src.loop=true; src.loopStart=s; src.loopEnd=e;
-    src.start(0,s);
+    src.loop=true; src.loopStart=s; src.loopEnd=e; src.start(0,s);
   } else {
     if(rel>0.01&&wallDur>atk+rel){
       const rs=now+wallDur-rel;
@@ -493,18 +627,19 @@ function playPad(padId){
     src.onended=()=>{
       state.activePads.delete(padId);
       delete srcs[padId]; delete gainNodes[padId];
-      renderPads();
+      renderPads(); renderPadMiniBar();
     };
   }
   srcs[padId]=src;
   state.activePads.add(padId);
-  renderPads();
+  renderPads(); renderPadMiniBar();
 }
 
 function stopPad(padId){
   const pad=state.pads[padId];
-  if(!pad) return;
-  if(pad.mode==='shot'&&!pad.loop) return;
+  if(!pad)return;
+  // For shot mode without loop: let it play through (don't stop early)
+  if(pad.mode==='shot'&&!pad.loop)return;
   const ctx=getCtx();
   const gn=gainNodes[padId];
   const rel=pad.release||0;
@@ -519,65 +654,39 @@ function stopPad(padId){
     delete srcs[padId]; delete gainNodes[padId];
   }
   state.activePads.delete(padId);
-  renderPads();
+  renderPads(); renderPadMiniBar();
 }
 
-// ── Preview Transport ─────────────────────────────────────────────────────────
+// ── Preview Transport ──────────────────────────────────────────────────────────
 function _launchPreview(offsetSec){
-  if(!state.editorId) return;
+  if(!state.editorId)return;
   const ctx=getCtx();
   const buf=bufs[state.editorId];
-  if(!buf) return;
+  if(!buf)return;
   const rStart=state.region.start*buf.duration;
-  const rDur  =Math.max(0.002,(state.region.end-state.region.start)*buf.duration);
+  const rDur=Math.max(0.002,(state.region.end-state.region.start)*buf.duration);
   const remaining=Math.max(0.005,rDur-offsetSec);
   try{srcs['_prev']?.stop();}catch{}
   const src=ctx.createBufferSource();
   src.buffer=buf; src.connect(masterGain);
-  src.start(0,rStart+offsetSec,remaining);
+  const pitchRate=Math.pow(2,state.masterPitch/12);
+  src.playbackRate.value=pitchRate;
+  src.start(0,rStart+offsetSec,remaining/pitchRate);
   state.prevCtxStartTime=ctx.currentTime;
-  state.prevOffset      =offsetSec;
-  state.prevRegionDur   =rDur;
+  state.prevOffset=offsetSec;
+  state.prevRegionDur=rDur;
   src.onended=()=>{
     if(state.prevStatus==='playing'){state.prevStatus='stopped';state.prevOffset=0;syncPreviewUI();}
   };
   srcs['_prev']=src;
 }
-
-function playPreview(){
-  if(!state.editorId) return;
-  const resumeFrom = state.prevStatus==='paused' ? state.prevOffset : 0;
-  _launchPreview(resumeFrom);
-  state.prevStatus='playing';
-  syncPreviewUI();
-}
-
-function pausePreview(){
-  if(state.prevStatus!=='playing') return;
-  const ctx=getCtx();
-  const elapsed=ctx.currentTime-state.prevCtxStartTime;
-  state.prevOffset=Math.min(state.prevRegionDur-0.005, state.prevOffset+elapsed);
-  state.prevStatus='paused';
-  try{srcs['_prev']?.stop();}catch{}
-  delete srcs['_prev'];
-  syncPreviewUI();
-}
-
-function stopPreview(){
-  state.prevStatus='stopped'; state.prevOffset=0;
-  try{srcs['_prev']?.stop();}catch{}
-  delete srcs['_prev'];
-  syncPreviewUI();
-}
-
+function playPreview(){if(!state.editorId)return;const rf=state.prevStatus==='paused'?state.prevOffset:0;_launchPreview(rf);state.prevStatus='playing';syncPreviewUI();}
+function pausePreview(){if(state.prevStatus!=='playing')return;const ctx=getCtx();const elapsed=ctx.currentTime-state.prevCtxStartTime;state.prevOffset=Math.min(state.prevRegionDur-0.005,state.prevOffset+elapsed);state.prevStatus='paused';try{srcs['_prev']?.stop();}catch{}delete srcs['_prev'];syncPreviewUI();}
+function stopPreview(){state.prevStatus='stopped';state.prevOffset=0;try{srcs['_prev']?.stop();}catch{}delete srcs['_prev'];syncPreviewUI();}
 function syncPreviewUI(){
-  const has=!!state.editorId;
-  const ps =state.prevStatus;
-  const dot   =document.getElementById('prevDot');
-  const btnPl =document.getElementById('btnPlay');
-  const btnPa =document.getElementById('btnPause');
-  const btnSt =document.getElementById('btnStop');
-  if(!dot) return;
+  const has=!!state.editorId,ps=state.prevStatus;
+  const dot=document.getElementById('prevDot'),btnPl=document.getElementById('btnPlay'),btnPa=document.getElementById('btnPause'),btnSt=document.getElementById('btnStop');
+  if(!dot)return;
   dot.className='prev-dot'+(ps==='playing'?' playing':ps==='paused'?' paused':'');
   btnPl.disabled=!has||(ps==='playing');
   btnPl.className='prev-btn'+(ps==='playing'?' is-playing':ps==='paused'?' is-paused-resume':'');
@@ -588,35 +697,32 @@ function syncPreviewUI(){
   btnSt.className='prev-btn'+(ps!=='stopped'?' is-playing':'');
 }
 
-// ── Crop ─────────────────────────────────────────────────────────────────────
+// ── Crop ───────────────────────────────────────────────────────────────────────
 function cropSample(){
-  if(!state.editorId) return;
+  if(!state.editorId)return;
   stopPreview();
   const buf=bufs[state.editorId];
   const sample=state.samples.find(s=>s.id===state.editorId);
-  if(!buf||!sample) return;
+  if(!buf||!sample)return;
   const rate=buf.sampleRate;
   const sIdx=Math.floor(state.region.start*buf.length);
-  const eIdx=Math.ceil (state.region.end  *buf.length);
-  const len =Math.max(2,eIdx-sIdx);
-  const ctx =getCtx();
-  const nb  =ctx.createBuffer(buf.numberOfChannels,len,rate);
-  for(let ch=0;ch<buf.numberOfChannels;ch++){
-    const s=buf.getChannelData(ch),d=nb.getChannelData(ch);
-    for(let i=0;i<len;i++) d[i]=s[sIdx+i]||0;
-  }
+  const eIdx=Math.ceil(state.region.end*buf.length);
+  const len=Math.max(2,eIdx-sIdx);
+  const ctx=getCtx();
+  const nb=ctx.createBuffer(buf.numberOfChannels,len,rate);
+  for(let ch=0;ch<buf.numberOfChannels;ch++){const s=buf.getChannelData(ch),d=nb.getChannelData(ch);for(let i=0;i<len;i++)d[i]=s[sIdx+i]||0;}
   const id=`s${Date.now()}${Math.random().toString(36).slice(2,5)}`;
   bufs[id]=nb; waves[id]=buildWave(nb);
   state.samples.push({id,name:sample.name+'_CROP',duration:nb.duration});
-  state.editorId=id; state.region={start:0,end:1};
+  state.editorId=id; state.region={start:0,end:1}; state.zoom={start:0,end:1};
   renderSampleBrowser(); renderEditorTitle(); drawWaveform(); renderWaveReadout(); syncPreviewUI();
 }
 
 function assign(){
-  if(state.selectedPad===null||!state.editorId) return;
+  if(state.selectedPad===null||!state.editorId)return;
   const p=state.pads[state.selectedPad];
   state.pads[state.selectedPad]={...p,sampleId:state.editorId,startRatio:state.region.start,endRatio:state.region.end};
-  renderInspector(); renderPads(); renderAssignBtn(); renderArmedCt();
+  renderInspector(); renderPads(); renderAssignBtn(); renderArmedCt(); renderPadMiniBar();
 }
 
 function clearPad(padId){
@@ -625,128 +731,365 @@ function clearPad(padId){
   state.activePads.delete(padId);
   const p=state.pads[padId];
   state.pads[padId]={...p,sampleId:null,startRatio:0,endRatio:1,loop:false};
-  renderInspector(); renderPads(); renderAssignBtn(); renderArmedCt();
+  renderInspector(); renderPads(); renderAssignBtn(); renderArmedCt(); renderPadMiniBar();
 }
 
-// ── Waveform canvas ───────────────────────────────────────────────────────────
-const wc  =document.getElementById('waveCanvas');
+// ── AUTO CHOP ──────────────────────────────────────────────────────────────────
+function autoChop(){
+  if(!state.editorId)return;
+  const n=state.autoChopCount;
+  const start=state.region.start;
+  const end=state.region.end;
+  const step=(end-start)/n;
+  let chops=[];
+
+  if(state.chopMode==='trans'){
+    // Transient detection: find onset points
+    const buf=bufs[state.editorId];
+    const ch=buf.getChannelData(0);
+    const sStart=Math.floor(start*ch.length);
+    const sEnd=Math.floor(end*ch.length);
+    const segLen=sEnd-sStart;
+    const windowSize=Math.floor(buf.sampleRate*0.01); // 10ms windows
+    // Build energy envelope
+    const energyLen=Math.floor(segLen/windowSize);
+    const energy=new Float32Array(energyLen);
+    for(let i=0;i<energyLen;i++){
+      let rms=0;
+      const wStart=sStart+i*windowSize;
+      for(let j=0;j<windowSize;j++){const v=ch[wStart+j]||0;rms+=v*v;}
+      energy[i]=Math.sqrt(rms/windowSize);
+    }
+    // Onset = energy increase
+    const onset=new Float32Array(energyLen);
+    for(let i=1;i<energyLen;i++){
+      const diff=energy[i]-energy[i-1];
+      onset[i]=diff>0?diff:0;
+    }
+    // Find N-1 strongest onsets (excluding very start)
+    const minGap=Math.floor(energyLen/n/2); // min gap between chops
+    const peaks=[];
+    for(let i=2;i<energyLen-2;i++){
+      if(onset[i]>onset[i-1]&&onset[i]>onset[i+1]&&onset[i]>0.01){
+        if(!peaks.length||i-peaks[peaks.length-1]>=minGap) peaks.push(i);
+      }
+    }
+    peaks.sort((a,b)=>onset[b]-onset[a]);
+    const topPeaks=peaks.slice(0,n-1).sort((a,b)=>a-b);
+    // Build chop points
+    const points=[sStart,...topPeaks.map(p=>sStart+p*windowSize),sEnd];
+    for(let i=0;i<Math.min(n,points.length-1);i++){
+      chops.push({s:points[i]/ch.length,e:points[i+1]/ch.length});
+    }
+  } else {
+    // Even division
+    for(let i=0;i<n;i++){
+      chops.push({s:start+i*step,e:start+(i+1)*step});
+    }
+  }
+
+  const count=Math.min(n,16,chops.length);
+  state.chopPoints=chops.map(c=>c.s);
+  state.chopPoints.push(end);
+
+  for(let i=0;i<count;i++){
+    state.pads[i]={...state.pads[i],sampleId:state.editorId,startRatio:chops[i].s,endRatio:chops[i].e};
+  }
+
+  renderPads(); renderAssignBtn(); renderArmedCt(); drawWaveform();
+  toast(`⚡ AUTO CHOP · ${count} CHOPS → ${count} PADS`,'#ff6b00');
+  if(window.innerWidth<768) setMobTab('Pads');
+}
+
+// ── Waveform canvas ────────────────────────────────────────────────────────────
+const wc=document.getElementById('waveCanvas');
 const wctx=wc.getContext('2d');
+
+// Map canvas x (0-1) → sample ratio via zoom window
+function viewToSample(px){return state.zoom.start+px*(state.zoom.end-state.zoom.start);}
+// Map sample ratio → canvas x (0-1) via zoom
+function sampleToView(sr){return(sr-state.zoom.start)/(state.zoom.end-state.zoom.start);}
 
 function drawWaveform(){
   const dpr=window.devicePixelRatio||1;
   const W=wc.offsetWidth,H=wc.offsetHeight;
+  if(!W||!H)return;
   if(wc.width!==W*dpr||wc.height!==H*dpr){wc.width=W*dpr;wc.height=H*dpr;}
   const ctx=wctx;
   ctx.save(); ctx.scale(dpr,dpr);
-  ctx.fillStyle="#04100a"; ctx.fillRect(0,0,W,H);
-  for(let y=0;y<H;y+=2){ctx.fillStyle="rgba(0,0,0,0.07)";ctx.fillRect(0,y,W,1);}
-  ctx.strokeStyle="rgba(0,255,80,0.04)"; ctx.lineWidth=1;
+  ctx.fillStyle='#04100a'; ctx.fillRect(0,0,W,H);
+  for(let y=0;y<H;y+=2){ctx.fillStyle='rgba(0,0,0,0.07)';ctx.fillRect(0,y,W,1);}
+  // Grid lines
+  ctx.strokeStyle='rgba(0,255,80,0.04)'; ctx.lineWidth=1;
   for(let i=1;i<8;i++){ctx.beginPath();ctx.moveTo(W/8*i,0);ctx.lineTo(W/8*i,H);ctx.stroke();}
   for(let i=1;i<4;i++){ctx.beginPath();ctx.moveTo(0,H/4*i);ctx.lineTo(W,H/4*i);ctx.stroke();}
+
   if(!state.editorId){
-    ctx.fillStyle="#1a3a1a";ctx.font="11px 'Courier New',monospace";
-    ctx.textAlign="center";ctx.fillText("LOAD A SAMPLE TO EDIT",W/2,H/2);
-    ctx.restore();return;
+    ctx.fillStyle='#1a3a1a';ctx.font="11px 'Courier New',monospace";ctx.textAlign='center';ctx.fillText('LOAD A SAMPLE TO EDIT',W/2,H/2);ctx.restore();return;
   }
   const wave=waves[state.editorId];
   if(!wave){ctx.restore();return;}
-  const rx1=state.region.start*W,rx2=state.region.end*W;
-  ctx.fillStyle="rgba(255,107,0,0.06)";ctx.fillRect(rx1,0,rx2-rx1,H);
-  const bw=W/wave.length;
-  for(let i=0;i<wave.length;i++){
-    const x=i*bw,t=i/wave.length;
+
+  const zs=state.zoom.start,ze=state.zoom.end,zRange=ze-zs;
+  const r=state.region;
+
+  // Draw region highlight (only visible portion)
+  const rv1=Math.max(0,sampleToView(r.start)),rv2=Math.min(1,sampleToView(r.end));
+  if(rv2>rv1){
+    ctx.fillStyle='rgba(255,107,0,0.06)';ctx.fillRect(rv1*W,0,(rv2-rv1)*W,H);
+  }
+
+  // Draw waveform bars for visible range
+  const iStart=Math.max(0,Math.floor(zs*wave.length));
+  const iEnd=Math.min(wave.length,Math.ceil(ze*wave.length));
+  const barCount=iEnd-iStart;
+  const barW=W/barCount;
+
+  for(let i=iStart;i<iEnd;i++){
+    const t=i/wave.length;
     const amp=wave[i]*H*0.9,y=(H-amp)/2;
-    const inR=t>=state.region.start&&t<=state.region.end;
+    const inR=(t>=r.start&&t<=r.end);
+    const viewX=((t-zs)/zRange)*W;
     if(inR){
       const g=ctx.createLinearGradient(0,y,0,y+amp);
-      g.addColorStop(0,"rgba(255,150,0,0.35)");g.addColorStop(0.5,"rgba(255,100,0,0.98)");g.addColorStop(1,"rgba(255,150,0,0.35)");
+      g.addColorStop(0,'rgba(255,150,0,0.35)');g.addColorStop(0.5,'rgba(255,100,0,0.98)');g.addColorStop(1,'rgba(255,150,0,0.35)');
       ctx.fillStyle=g;
     } else {
       const br=Math.floor(40+wave[i]*140);ctx.fillStyle=`rgba(0,${br},30,0.55)`;
     }
-    ctx.fillRect(x,y,Math.max(0.4,bw-0.3),Math.max(1,amp));
+    ctx.fillRect(viewX,y,Math.max(0.4,barW-0.3),Math.max(1,amp));
   }
-  ctx.strokeStyle="rgba(0,255,80,0.12)";ctx.lineWidth=1;
+
+  // Center line
+  ctx.strokeStyle='rgba(0,255,80,0.12)';ctx.lineWidth=1;
   ctx.beginPath();ctx.moveTo(0,H/2);ctx.lineTo(W,H/2);ctx.stroke();
-  const marker=(x,lbl,right)=>{
-    ctx.strokeStyle="#ff6b00";ctx.lineWidth=2;ctx.setLineDash([4,3]);
+
+  // Draw chop markers
+  if(state.chopPoints.length>0){
+    state.chopPoints.forEach((cp,i)=>{
+      const vx=sampleToView(cp);
+      if(vx<0||vx>1)return;
+      const cx=vx*W;
+      const col=PAD_COLORS[i%16];
+      ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.setLineDash([3,2]);
+      ctx.beginPath();ctx.moveTo(cx,0);ctx.lineTo(cx,H);ctx.stroke();
+      ctx.setLineDash([]);
+      // Label
+      if(i<16){
+        ctx.fillStyle=col+'99';ctx.fillRect(cx+1,2,18,11);
+        ctx.fillStyle='#000';ctx.font="bold 7px 'Courier New',monospace";ctx.textAlign='left';
+        ctx.fillText(PAD_LABELS[i],cx+3,10.5);
+      }
+    });
+  }
+
+  // IN / OUT markers
+  const marker=(sRatio,lbl,right)=>{
+    const vx=sampleToView(sRatio);
+    if(vx<-0.02||vx>1.02)return;
+    const x=Math.max(0,Math.min(W,vx*W));
+    ctx.strokeStyle='#ff6b00';ctx.lineWidth=2;ctx.setLineDash([4,3]);
     ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();ctx.setLineDash([]);
-    const tw=26,th=15,tx=right?x-tw:x;
-    ctx.fillStyle="#ff6b00";ctx.fillRect(tx,0,tw,th);
-    ctx.fillStyle="#000";ctx.font="bold 8px 'Courier New',monospace";
-    ctx.textAlign="center";ctx.fillText(lbl,tx+tw/2,10.5);
+    const tw=26,th=15,tx=right?Math.max(0,x-tw):Math.min(W-tw,x);
+    ctx.fillStyle='#ff6b00';ctx.fillRect(tx,0,tw,th);
+    ctx.fillStyle='#000';ctx.font="bold 8px 'Courier New',monospace";ctx.textAlign='center';ctx.fillText(lbl,tx+tw/2,10.5);
   };
-  marker(rx1," IN",false); marker(rx2,"OUT",true);
+  marker(r.start,' IN',false); marker(r.end,'OUT',true);
+
   ctx.restore();
+  updateZoomOverview();
+  updateZoomLabel();
 }
 
-function cPos(e){const r=wc.getBoundingClientRect();return Math.max(0,Math.min(1,(e.clientX-r.left)/r.width));}
-wc.addEventListener('mousedown',e=>{
+function updateZoomOverview(){
+  const thumb=document.getElementById('zoomThumb');
+  const bar=document.getElementById('zoomOverview');
+  if(!thumb||!bar)return;
+  const zs=state.zoom.start,ze=state.zoom.end;
+  thumb.style.left=(zs*100)+'%';
+  thumb.style.width=((ze-zs)*100)+'%';
+}
+
+function updateZoomLabel(){
+  const pct=document.getElementById('zoomPct');
+  if(!pct)return;
+  const range=state.zoom.end-state.zoom.start;
+  pct.textContent=Math.round(100/range)+'%';
+}
+
+// Zoom helpers
+function zoomAt(centerSample,newRange){
+  newRange=Math.max(0.02,Math.min(1,newRange));
+  let ns,ne;
+  // Keep center fixed
+  const ratio=(centerSample-state.zoom.start)/(state.zoom.end-state.zoom.start);
+  ns=centerSample-ratio*newRange;
+  ne=ns+newRange;
+  if(ns<0){ns=0;ne=newRange;}
+  if(ne>1){ne=1;ns=1-newRange;}
+  state.zoom={start:ns,end:ne};
+  drawWaveform();
+}
+function zoomIn(){const range=state.zoom.end-state.zoom.start;const center=(state.zoom.start+state.zoom.end)/2;zoomAt(center,range*0.6);}
+function zoomOut(){const range=state.zoom.end-state.zoom.start;const center=(state.zoom.start+state.zoom.end)/2;zoomAt(center,range/0.6);}
+function zoomFit(){state.zoom={start:0,end:1};drawWaveform();}
+
+// Overview bar click → pan zoom there
+document.getElementById('zoomOverview').addEventListener('click',e=>{
+  const bar=e.currentTarget.getBoundingClientRect();
+  const px=(e.clientX-bar.left)/bar.width;
+  const range=state.zoom.end-state.zoom.start;
+  let ns=px-range/2,ne=ns+range;
+  if(ns<0){ns=0;ne=range;}
+  if(ne>1){ne=1;ns=1-range;}
+  state.zoom={start:ns,end:ne};
+  drawWaveform();
+});
+
+// ── Waveform interactions (mouse + touch) ─────────────────────────────────────
+const pointers=new Map();
+let pinchInitSpread=null,pinchInitZoom=null,pinchInitCenter=null;
+
+function canvasRelX(clientX){
+  const r=wc.getBoundingClientRect();
+  return Math.max(0,Math.min(1,(clientX-r.left)/r.width));
+}
+
+wc.addEventListener('wheel',e=>{
   if(!state.editorId)return;
   e.preventDefault();
-  stopPreview();
-  const x=cPos(e);
-  state.isDragging=true;state.dragStart=x;state.region={start:x,end:x};
-  drawWaveform();renderWaveReadout();
-});
-wc.addEventListener('mousemove',e=>{
-  if(!state.isDragging)return;
-  const x=cPos(e);
-  state.region={start:Math.min(state.dragStart,x),end:Math.max(state.dragStart,x)};
-  drawWaveform();renderWaveReadout();
-});
-function endDrag(){
-  if(!state.isDragging)return;
+  const px=canvasRelX(e.clientX);
+  const cs=viewToSample(px);
+  const range=state.zoom.end-state.zoom.start;
+  const factor=e.deltaY>0?1.25:0.75;
+  zoomAt(cs,range*factor);
+},{passive:false});
+
+wc.addEventListener('pointerdown',e=>{
+  if(!state.editorId)return;
+  e.preventDefault();
+  wc.setPointerCapture(e.pointerId);
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+
+  if(pointers.size===1){
+    if(e.shiftKey||e.altKey){
+      // Pan mode
+      state.isPanning=true;
+      state.panStartX=e.clientX;
+      state.panStartZoom={...state.zoom};
+    } else {
+      // Region selection
+      stopPreview();
+      state.isDragging=true;
+      state.chopPoints=[];
+      const x=viewToSample(canvasRelX(e.clientX));
+      state.dragStart=x;
+      state.region={start:x,end:x};
+      drawWaveform(); renderWaveReadout();
+    }
+  } else if(pointers.size===2){
+    // Pinch to zoom
+    state.isDragging=false;
+    state.isPanning=false;
+    const pts=[...pointers.values()];
+    const r=wc.getBoundingClientRect();
+    pinchInitSpread=Math.abs(pts[1].x-pts[0].x);
+    pinchInitZoom={...state.zoom};
+    pinchInitCenter=((pts[0].x+pts[1].x)/2-r.left)/r.width;
+  }
+},{passive:false});
+
+wc.addEventListener('pointermove',e=>{
+  if(!state.editorId)return;
+  e.preventDefault();
+  pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+
+  if(pointers.size>=2&&pinchInitSpread!==null){
+    // Pinch zoom
+    const pts=[...pointers.values()];
+    const spread=Math.abs(pts[1].x-pts[0].x);
+    const scale=pinchInitSpread/Math.max(1,spread);
+    const initRange=pinchInitZoom.end-pinchInitZoom.start;
+    const centerSample=pinchInitZoom.start+pinchInitCenter*initRange;
+    zoomAt(centerSample,initRange*scale);
+  } else if(state.isDragging){
+    const x=viewToSample(canvasRelX(e.clientX));
+    state.region={start:Math.min(state.dragStart,x),end:Math.max(state.dragStart,x)};
+    drawWaveform(); renderWaveReadout();
+  } else if(state.isPanning){
+    const r=wc.getBoundingClientRect();
+    const dx=-(e.clientX-state.panStartX)/r.width;
+    const initRange=state.panStartZoom.end-state.panStartZoom.start;
+    let ns=state.panStartZoom.start+dx*initRange;
+    let ne=ns+initRange;
+    if(ns<0){ns=0;ne=initRange;}
+    if(ne>1){ne=1;ns=1-initRange;}
+    state.zoom={start:ns,end:ne};
+    drawWaveform();
+  }
+},{passive:false});
+
+function endWaveInteraction(){
   state.isDragging=false;
-  if(state.region.end-state.region.start<0.005)state.region={start:0,end:1};
-  drawWaveform();renderWaveReadout();
+  state.isPanning=false;
+  pinchInitSpread=null; pinchInitZoom=null; pinchInitCenter=null;
+  if(state.region.end-state.region.start<0.005){state.region={start:0,end:1};}
+  drawWaveform(); renderWaveReadout();
 }
-wc.addEventListener('mouseup',endDrag);
-wc.addEventListener('mouseleave',endDrag);
+
+wc.addEventListener('pointerup',e=>{pointers.delete(e.pointerId);if(pointers.size===0)endWaveInteraction();});
+wc.addEventListener('pointercancel',e=>{pointers.delete(e.pointerId);endWaveInteraction();});
 new ResizeObserver(()=>{wc.width=0;drawWaveform();}).observe(wc);
 
-// ── Knob ──────────────────────────────────────────────────────────────────────
+// ── Knob class ────────────────────────────────────────────────────────────────
 class Knob{
-  constructor(canvas,{min,max,value,color='#ff6b00',defaultVal,onChange}){
+  constructor(canvas,{min,max,value,color='#ff6b00',defaultVal,onChange,integer=false,size=44}){
     this.c=canvas;this.min=min;this.max=max;this.value=value;
     this.color=color;this.def=defaultVal??min;this.onChange=onChange||null;
+    this.integer=integer;this.sz=size;
     const dpr=window.devicePixelRatio||1;
-    this.c.width=44*dpr;this.c.height=44*dpr;
-    this.c.style.width='44px';this.c.style.height='44px';
+    this.c.width=size*dpr;this.c.height=size*dpr;
+    this.c.style.width=size+'px';this.c.style.height=size+'px';
     this.draw();this._bind();
   }
   draw(){
     const dpr=window.devicePixelRatio||1;
-    const W=44,H=44,cx=W/2,cy=H/2,r=17;
+    const W=this.sz,H=this.sz,cx=W/2,cy=H/2,r=W*0.38;
     const ctx=this.c.getContext('2d');
     ctx.save();ctx.scale(dpr,dpr);ctx.clearRect(0,0,W,H);
     ctx.shadowColor='rgba(0,0,0,0.6)';ctx.shadowBlur=5;ctx.shadowOffsetY=2;
     ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle='#1e1e1e';ctx.fill();
     ctx.shadowColor='transparent';
     const SA=Math.PI*0.75+Math.PI/2,EA=SA+Math.PI*1.5;
-    ctx.beginPath();ctx.arc(cx,cy,r-4,SA,EA);ctx.strokeStyle='#0d0d0d';ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();
+    ctx.beginPath();ctx.arc(cx,cy,r*0.76,SA,EA);ctx.strokeStyle='#0d0d0d';ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();
     const t=(this.value-this.min)/(this.max-this.min);
     const VA=SA+t*Math.PI*1.5;
-    if(t>0.001){ctx.beginPath();ctx.arc(cx,cy,r-4,SA,VA);ctx.strokeStyle=this.color;ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();}
-    const gi=ctx.createRadialGradient(cx-2,cy-2,0,cx,cy,r-8);
+    if(t>0.001){ctx.beginPath();ctx.arc(cx,cy,r*0.76,SA,VA);ctx.strokeStyle=this.color;ctx.lineWidth=3;ctx.lineCap='round';ctx.stroke();}
+    const gi=ctx.createRadialGradient(cx-2,cy-2,0,cx,cy,r*0.6);
     gi.addColorStop(0,'#383838');gi.addColorStop(1,'#1c1c1c');
-    ctx.beginPath();ctx.arc(cx,cy,r-8,0,Math.PI*2);ctx.fillStyle=gi;ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,r*0.6,0,Math.PI*2);ctx.fillStyle=gi;ctx.fill();
     ctx.strokeStyle='#0d0d0d';ctx.lineWidth=1;ctx.stroke();
-    const pa=VA-Math.PI/2,pr=r-13;
-    ctx.beginPath();ctx.arc(cx+pr*Math.cos(pa+Math.PI/2),cy+pr*Math.sin(pa+Math.PI/2),2,0,Math.PI*2);
+    const pa=VA-Math.PI/2,pr=r*0.32;
+    ctx.beginPath();ctx.arc(cx+pr*Math.cos(pa+Math.PI/2),cy+pr*Math.sin(pa+Math.PI/2),r*0.1,0,Math.PI*2);
     ctx.fillStyle='#fff';ctx.fill();
     ctx.restore();
   }
+  _update(clientY,sv,sy){
+    const dy=sy-clientY;
+    let v=sv+dy/80*(this.max-this.min);
+    if(this.integer)v=Math.round(v);
+    this.value=Math.max(this.min,Math.min(this.max,v));
+    this.draw();this.onChange?.(this.value);
+  }
   _bind(){
     let sy,sv;
-    const mm=e=>{
-      const dy=sy-e.clientY;
-      this.value=Math.max(this.min,Math.min(this.max,sv+dy/80*(this.max-this.min)));
-      this.draw();this.onChange?.(this.value);
-    };
+    const mm=e=>{this._update(e.clientY,sv,sy);};
     const mu=()=>{window.removeEventListener('mousemove',mm);window.removeEventListener('mouseup',mu);};
     this.c.addEventListener('mousedown',e=>{sy=e.clientY;sv=this.value;e.preventDefault();window.addEventListener('mousemove',mm);window.addEventListener('mouseup',mu);});
     this.c.addEventListener('dblclick',()=>{this.value=this.def;this.draw();this.onChange?.(this.value);});
+    // Touch
+    this.c.addEventListener('touchstart',e=>{e.preventDefault();sy=e.touches[0].clientY;sv=this.value;},{passive:false});
+    this.c.addEventListener('touchmove',e=>{e.preventDefault();this._update(e.touches[0].clientY,sv,sy);},{passive:false});
   }
 }
 
@@ -766,7 +1109,8 @@ function renderSampleBrowser(){
   `).join('');
   list.querySelectorAll('.s-item').forEach(el=>el.addEventListener('click',()=>{
     stopPreview();
-    state.editorId=el.dataset.sid;state.region={start:0,end:1};
+    state.editorId=el.dataset.sid;state.region={start:0,end:1};state.zoom={start:0,end:1};state.chopPoints=[];
+    document.getElementById('btnAutoChop').disabled=false;
     renderSampleBrowser();renderEditorTitle();drawWaveform();renderWaveReadout();syncPreviewUI();
   }));
 }
@@ -782,9 +1126,10 @@ function renderWaveReadout(){
   if(!s){div.innerHTML='<span class="no-wave">NO SAMPLE LOADED — UPLOAD A FILE TO BEGIN</span>';return;}
   div.innerHTML=[
     ['START',fmt(state.region.start*s.duration)],
-    ['END',  fmt(state.region.end  *s.duration)],
+    ['END',  fmt(state.region.end*s.duration)],
     ['LEN',  `${((state.region.end-state.region.start)*s.duration).toFixed(3)}s`],
     ['FULL', fmt(s.duration)],
+    ['ZOOM', `${Math.round(100/(state.zoom.end-state.zoom.start))}%`],
   ].map(([k,v])=>`<div><div class="rk">${k}</div><div class="rv">${v}</div></div>`).join('');
 }
 
@@ -796,7 +1141,8 @@ function renderAssignBtn(){
 }
 
 function renderArmedCt(){
-  document.getElementById('armedCt').textContent=`${state.pads.filter(p=>p.sampleId).length}/16 PADS ARMED`;
+  const el=document.getElementById('armedCt');
+  if(el)el.textContent=`${state.pads.filter(p=>p.sampleId).length}/16 PADS ARMED`;
 }
 
 function renderPads(){
@@ -805,13 +1151,31 @@ function renderPads(){
     DISPLAY_ORDER.forEach(pi=>{
       const d=document.createElement('div');
       d.className='pad';d.dataset.pi=pi;
-      d.addEventListener('mousedown',e=>{
+
+      d.addEventListener('pointerdown',e=>{
         e.preventDefault();
-        state.selectedPad=pi; playPad(pi);
-        renderPads();renderInspector();renderAssignBtn();
+        d.setPointerCapture(e.pointerId);
+        state.selectedPad=pi;
+        const pad=state.pads[pi];
+        // Loop toggle: if looping & active → stop; else → play
+        if(pad.loop&&state.activePads.has(pi)){
+          stopPad(pi);
+        } else {
+          playPad(pi);
+        }
+        renderPads(); renderInspector(); renderAssignBtn(); renderPadMiniBar();
       });
-      d.addEventListener('mouseup',()=>stopPad(pi));
-      d.addEventListener('mouseleave',()=>stopPad(pi));
+
+      // Hold mode: stop on release (non-loop)
+      d.addEventListener('pointerup',()=>{
+        const pad=state.pads[pi];
+        if(pad.mode==='hold'&&!pad.loop) stopPad(pi);
+      });
+      d.addEventListener('pointerleave',()=>{
+        const pad=state.pads[pi];
+        if(pad.mode==='hold'&&!pad.loop) stopPad(pi);
+      });
+
       grid.appendChild(d);
     });
   }
@@ -829,9 +1193,9 @@ function renderPads(){
       border:${sel?`2px solid ${col}`:active?`2px solid ${col}`:has?`1px solid ${col}33`:'1px solid #1c1c1c'};
       cursor:pointer;display:flex;flex-direction:column;justify-content:space-between;padding:9px;
       transition:transform .04s,box-shadow .04s,background .04s;
-      transform:${active?'scale(0.92)':'scale(1)'};
+      transform:${active?'scale(0.93)':'scale(1)'};
       box-shadow:${active?`0 0 28px ${col}99,inset 0 2px 4px rgba(0,0,0,0.6)`:sel?`0 0 14px ${col}44`:'0 3px 8px rgba(0,0,0,0.7)'};
-      position:relative;overflow:hidden;
+      position:relative;overflow:hidden;touch-action:none;
     `;
     el.innerHTML=`
       ${active?`<div class="pad-glow" style="background:radial-gradient(circle,${col}30,transparent)"></div>`:''}
@@ -853,7 +1217,7 @@ function renderPads(){
 function renderInspector(){
   const pi=state.selectedPad;
   const titleEl=document.getElementById('inspTitle');
-  const body   =document.getElementById('inspBody');
+  const body=document.getElementById('inspBody');
   if(pi===null){titleEl.textContent='PAD INSPECTOR';body.innerHTML='<div class="no-sel">SELECT A PAD</div>';return;}
   const pad=state.pads[pi];
   titleEl.textContent=`PAD ${pad.label} INSPECTOR`;
@@ -862,9 +1226,9 @@ function renderInspector(){
     return;
   }
   const buf=bufs[pad.sampleId];
-  const inT =buf?pad.startRatio*buf.duration:0;
-  const outT=buf?pad.endRatio  *buf.duration:0;
-  const sn  =state.samples.find(s=>s.id===pad.sampleId)?.name||'';
+  const inT=buf?pad.startRatio*buf.duration:0;
+  const outT=buf?pad.endRatio*buf.duration:0;
+  const sn=state.samples.find(s=>s.id===pad.sampleId)?.name||'';
 
   body.innerHTML=`
     <div style="color:#3a55aa;font-size:10px;margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${sn}</div>
@@ -883,7 +1247,7 @@ function renderInspector(){
       <div class="info-cell"><div class="info-k">IN</div><div class="info-v">${fmt(inT)}</div></div>
       <div class="info-cell"><div class="info-k">OUT</div><div class="info-v">${fmt(outT)}</div></div>
       <div class="info-cell"><div class="info-k">LEN</div><div class="info-v">${(outT-inT).toFixed(3)}s</div></div>
-      <div class="info-cell"><div class="info-k">LOOP</div><div class="info-v${pad.loop?' orange':''}">${pad.loop?'ON':'OFF'}</div></div>
+      <div class="info-cell"><div class="info-k">LOOP</div><div class="info-v${pad.loop?' orange':''}">${pad.loop?'ON ∞':'OFF'}</div></div>
     </div>
     <div class="inspector-actions">
       <button class="btn${pad.loop?' on':''}" id="btnLoop">${pad.loop?'∞ LOOP ON':'∞ LOOP OFF'}</button>
@@ -896,26 +1260,24 @@ function renderInspector(){
     </div>
     <div class="knobs-row" id="kRow"></div>
   `;
-
-  document.getElementById('mShot').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],mode:'shot'};renderInspector();renderPads();});
-  document.getElementById('mHold').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],mode:'hold'};renderInspector();renderPads();});
-  document.getElementById('btnLoop').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],loop:!state.pads[pi].loop};renderInspector();});
+  document.getElementById('mShot').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],mode:'shot'};renderInspector();renderPads();renderPadMiniBar();});
+  document.getElementById('mHold').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],mode:'hold'};renderInspector();renderPads();renderPadMiniBar();});
+  document.getElementById('btnLoop').addEventListener('click',()=>{state.pads[pi]={...state.pads[pi],loop:!state.pads[pi].loop};renderInspector();renderPads();renderPadMiniBar();});
   document.getElementById('btnClr').addEventListener('click',()=>clearPad(pi));
   document.getElementById('btnPl').addEventListener('click',()=>playPad(pi));
   document.getElementById('vSl').addEventListener('input',e=>{
     state.pads[pi]={...state.pads[pi],volume:+e.target.value};
     document.getElementById('vLbl').textContent=`VOLUME: ${Math.round(+e.target.value*100)}%`;
   });
-
   const knobDefs=[
-    {key:'pitch',  label:'PITCH', min:-24, max:24,  defaultVal:0, color:'#6688ff', fmt:v=>v===0?'0 st':(v>0?'+':'')+v.toFixed(1)+' st'},
-    {key:'attack', label:'ATTK',  min:0,   max:0.5, defaultVal:0, color:'#4dff91', fmt:v=>v<0.002?'0 ms':`${(v*1000).toFixed(0)} ms`},
-    {key:'release',label:'REL',   min:0,   max:2.0, defaultVal:0, color:'#ff5252', fmt:v=>v<0.002?'0 ms':`${(v*1000).toFixed(0)} ms`},
+    {key:'pitch',  label:'PITCH', min:-24,max:24, defaultVal:0,color:'#6688ff',fmt:v=>v===0?'0 st':(v>0?'+':'')+v.toFixed(1)+' st'},
+    {key:'attack', label:'ATTK',  min:0,  max:0.5,defaultVal:0,color:'#4dff91',fmt:v=>v<0.002?'0 ms':`${(v*1000).toFixed(0)} ms`},
+    {key:'release',label:'REL',   min:0,  max:2.0,defaultVal:0,color:'#ff5252',fmt:v=>v<0.002?'0 ms':`${(v*1000).toFixed(0)} ms`},
   ];
   const kRow=document.getElementById('kRow');
   knobDefs.forEach(def=>{
     const wrap=document.createElement('div');wrap.className='knob-wrap';
-    const cnv=document.createElement('canvas');cnv.className='knob-canvas';
+    const cnv=document.createElement('canvas');cnv.className='knob-canvas';cnv.style.touchAction='none';
     const lbl=document.createElement('div');lbl.className='knob-lbl';lbl.textContent=def.label;
     const val=document.createElement('div');val.className='knob-val';val.textContent=def.fmt(pad[def.key]);
     wrap.append(cnv,lbl,val);kRow.appendChild(wrap);
@@ -924,15 +1286,67 @@ function renderInspector(){
   });
 }
 
+// Mobile pad mini bar
+function renderPadMiniBar(){
+  const pi=state.selectedPad;
+  const lbl=document.getElementById('pmbLabel');
+  const nm=document.getElementById('pmbName');
+  const playBtn=document.getElementById('pmbPlay');
+  const loopBtn=document.getElementById('pmbLoop');
+  const modeBtn=document.getElementById('pmbMode');
+  if(!lbl)return;
+  if(pi===null||!state.pads[pi].sampleId){
+    lbl.textContent='—'; nm.textContent='no pad selected';
+    loopBtn.className='pmb-btn'; modeBtn.className='pmb-btn';
+    return;
+  }
+  const pad=state.pads[pi];
+  const sn=state.samples.find(s=>s.id===pad.sampleId)?.name||'';
+  lbl.textContent=pad.label;
+  nm.textContent=sn;
+  playBtn.onclick=()=>playPad(pi);
+  loopBtn.className='pmb-btn'+(pad.loop?' on':'');
+  loopBtn.textContent='∞';
+  loopBtn.onclick=()=>{state.pads[pi]={...state.pads[pi],loop:!state.pads[pi].loop};renderInspector();renderPads();renderPadMiniBar();};
+  modeBtn.textContent=pad.mode==='shot'?'SHT':'HLD';
+  modeBtn.className='pmb-btn'+(pad.mode==='hold'?' on':'');
+  modeBtn.onclick=()=>{
+    const newMode=state.pads[pi].mode==='shot'?'hold':'shot';
+    state.pads[pi]={...state.pads[pi],mode:newMode};
+    renderInspector();renderPads();renderPadMiniBar();
+  };
+}
+
+// ── Mobile tab system ─────────────────────────────────────────────────────────
+function setMobTab(tab){
+  // Only applies visually on mobile, but we track it anyway
+  document.querySelectorAll('.mob-panel').forEach(p=>p.classList.remove('mob-active'));
+  document.getElementById('panel'+tab).classList.add('mob-active');
+  document.querySelectorAll('.mob-tab-btn').forEach(b=>{
+    b.classList.toggle('active',b.dataset.tab===tab);
+  });
+}
+
 // ── Keyboard ──────────────────────────────────────────────────────────────────
 window.addEventListener('keydown',e=>{
   if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;
   const k=e.key.toLowerCase();
-  if(k in PAD_KEYS&&!pressed.has(k)){pressed.add(k);playPad(PAD_KEYS[k]);}
+  if(k in PAD_KEYS&&!pressed.has(k)){
+    pressed.add(k);
+    const pi=PAD_KEYS[k];
+    const pad=state.pads[pi];
+    if(pad.loop&&state.activePads.has(pi)){stopPad(pi);}
+    else{playPad(pi);}
+  }
 });
 window.addEventListener('keyup',e=>{
   const k=e.key.toLowerCase();
-  if(k in PAD_KEYS){pressed.delete(k);stopPad(PAD_KEYS[k]);}
+  if(k in PAD_KEYS){
+    pressed.delete(k);
+    const pi=PAD_KEYS[k];
+    const pad=state.pads[pi];
+    if(pad.mode==='hold'&&!pad.loop) stopPad(pi);
+  }
 });
 
 // ── Event wiring ──────────────────────────────────────────────────────────────
@@ -941,362 +1355,229 @@ uz.addEventListener('dragover',e=>{e.preventDefault();uz.classList.add('drag-ove
 uz.addEventListener('dragleave',()=>uz.classList.remove('drag-over'));
 uz.addEventListener('drop',e=>{e.preventDefault();uz.classList.remove('drag-over');handleUpload(e.dataTransfer.files);});
 document.getElementById('fileInput').addEventListener('change',e=>handleUpload(e.target.files));
-document.getElementById('masterVol').addEventListener('input',e=>{
-  state.masterVol=+e.target.value;
-  if(masterGain)masterGain.gain.value=state.masterVol;
+document.getElementById('masterVol').addEventListener('input',e=>{state.masterVol=+e.target.value;if(masterGain)masterGain.gain.value=state.masterVol;});
+document.getElementById('bpmInput').addEventListener('input',e=>{
+  const v=Math.max(40,Math.min(300,parseInt(e.target.value)||120));
+  state.tempo=v;
+  if(tempoKnobInst){tempoKnobInst.value=v;tempoKnobInst.draw();}
+  document.getElementById('tempoVal').textContent=v;
 });
-document.getElementById('btnAll').addEventListener('click',()=>{
-  stopPreview();state.region={start:0,end:1};drawWaveform();renderWaveReadout();
-});
-document.getElementById('btnPlay') .addEventListener('click',playPreview);
+document.getElementById('btnAll').addEventListener('click',()=>{stopPreview();state.region={start:0,end:1};drawWaveform();renderWaveReadout();});
+document.getElementById('btnPlay').addEventListener('click',playPreview);
 document.getElementById('btnPause').addEventListener('click',pausePreview);
-document.getElementById('btnStop') .addEventListener('click',stopPreview);
-document.getElementById('btnCrop') .addEventListener('click',cropSample);
+document.getElementById('btnStop').addEventListener('click',stopPreview);
+document.getElementById('btnCrop').addEventListener('click',cropSample);
 document.getElementById('assignBtn').addEventListener('click',assign);
+document.getElementById('btnZoomIn').addEventListener('click',zoomIn);
+document.getElementById('btnZoomOut').addEventListener('click',zoomOut);
+document.getElementById('btnZoomFit').addEventListener('click',zoomFit);
+document.getElementById('btnAutoChop').addEventListener('click',autoChop);
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// ── TOAST ─────────────────────────────────────────────────────────────────────
-// ═══════════════════════════════════════════════════════════════════════════════
+// Chop mode buttons
+document.getElementById('chopModeEven').addEventListener('click',()=>{
+  state.chopMode='even';
+  document.getElementById('chopModeEven').className='chop-mode-btn active';
+  document.getElementById('chopModeTrans').className='chop-mode-btn';
+});
+document.getElementById('chopModeTrans').addEventListener('click',()=>{
+  state.chopMode='trans';
+  document.getElementById('chopModeTrans').className='chop-mode-btn active';
+  document.getElementById('chopModeEven').className='chop-mode-btn';
+});
+
+// ── Init knobs ────────────────────────────────────────────────────────────────
+let tempoKnobInst=null;
+tempoKnobInst=new Knob(document.getElementById('tempoKnob'),{
+  min:40,max:240,value:120,color:'#ff6b00',defaultVal:120,integer:true,size:42,
+  onChange:v=>{
+    state.tempo=v;
+    document.getElementById('bpmInput').value=v;
+    document.getElementById('tempoVal').textContent=v;
+  }
+});
+
+new Knob(document.getElementById('masterPitchKnob'),{
+  min:-12,max:12,value:0,color:'#6688ff',defaultVal:0,size:42,
+  onChange:v=>{
+    state.masterPitch=v;
+    document.getElementById('masterPitchVal').textContent=(v===0?'0':(v>0?'+':'')+v.toFixed(1))+' st';
+  }
+});
+
+let chopCountKnobInst=null;
+chopCountKnobInst=new Knob(document.getElementById('chopCountKnob'),{
+  min:2,max:16,value:8,color:'#ff6b00',defaultVal:8,integer:true,size:36,
+  onChange:v=>{
+    state.autoChopCount=Math.round(v);
+    document.getElementById('chopCountVal').textContent=Math.round(v);
+  }
+});
+
+// ── TOAST ──────────────────────────────────────────────────────────────────────
 function toast(msg,color='#4dff91'){
   const t=document.getElementById('toastMsg');
-  t.textContent=msg; t.style.color=color; t.style.opacity='1';
-  clearTimeout(t._tid);
-  t._tid=setTimeout(()=>{t.style.opacity='0';},2600);
+  t.textContent=msg;t.style.color=color;t.style.opacity='1';
+  clearTimeout(t._tid);t._tid=setTimeout(()=>{t.style.opacity='0';},2600);
 }
 
-// ── Progress overlay ──────────────────────────────────────────────────────────
-function showProgress(title,msg,pct){
-  const o=document.getElementById('progressOverlay');
-  document.getElementById('progTitle').textContent=title;
-  document.getElementById('progMsg').textContent=msg;
-  document.getElementById('progBar').style.width=pct+'%';
-  o.classList.add('visible');
-}
+// ── Progress ───────────────────────────────────────────────────────────────────
+function showProgress(title,msg,pct){const o=document.getElementById('progressOverlay');document.getElementById('progTitle').textContent=title;document.getElementById('progMsg').textContent=msg;document.getElementById('progBar').style.width=pct+'%';o.classList.add('visible');}
 function hideProgress(){document.getElementById('progressOverlay').classList.remove('visible');}
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// ── WAV ENCODER ───────────────────────────────────────────────────────────────
-// ═══════════════════════════════════════════════════════════════════════════════
+// ── WAV Encoder ────────────────────────────────────────────────────────────────
 function writeStr(v,o,s){for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));}
-
 function encodeWAV(buf){
-  const nc=buf.numberOfChannels, sr=buf.sampleRate, len=buf.length;
-  const dataLen=len*nc*2;
-  const ab=new ArrayBuffer(44+dataLen);
-  const v=new DataView(ab);
-  writeStr(v,0,'RIFF'); v.setUint32(4,36+dataLen,true); writeStr(v,8,'WAVE');
-  writeStr(v,12,'fmt '); v.setUint32(16,16,true); v.setUint16(20,1,true);
-  v.setUint16(22,nc,true); v.setUint32(24,sr,true);
-  v.setUint32(28,sr*nc*2,true); v.setUint16(32,nc*2,true); v.setUint16(34,16,true);
-  writeStr(v,36,'data'); v.setUint32(40,dataLen,true);
-  const channels=[];
-  for(let c=0;c<nc;c++) channels.push(buf.getChannelData(c));
+  const nc=buf.numberOfChannels,sr=buf.sampleRate,len=buf.length,dataLen=len*nc*2;
+  const ab=new ArrayBuffer(44+dataLen);const v=new DataView(ab);
+  writeStr(v,0,'RIFF');v.setUint32(4,36+dataLen,true);writeStr(v,8,'WAVE');
+  writeStr(v,12,'fmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);
+  v.setUint16(22,nc,true);v.setUint32(24,sr,true);v.setUint32(28,sr*nc*2,true);v.setUint16(32,nc*2,true);v.setUint16(34,16,true);
+  writeStr(v,36,'data');v.setUint32(40,dataLen,true);
+  const channels=[];for(let c=0;c<nc;c++)channels.push(buf.getChannelData(c));
   let off=44;
-  for(let i=0;i<len;i++) for(let c=0;c<nc;c++){
-    const s=Math.max(-1,Math.min(1,channels[c][i]));
-    v.setInt16(off,s<0?s*0x8000:s*0x7FFF,true); off+=2;
-  }
+  for(let i=0;i<len;i++)for(let c=0;c<nc;c++){const s=Math.max(-1,Math.min(1,channels[c][i]));v.setInt16(off,s<0?s*0x8000:s*0x7FFF,true);off+=2;}
   return ab;
 }
+function ab2b64(ab){const bytes=new Uint8Array(ab);let bin='';const CHUNK=8192;for(let i=0;i<bytes.length;i+=CHUNK)bin+=String.fromCharCode(...bytes.subarray(i,Math.min(i+CHUNK,bytes.length)));return btoa(bin);}
+function b642ab(b64){const bin=atob(b64);const bytes=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);return bytes.buffer;}
 
-function ab2b64(ab){
-  const bytes=new Uint8Array(ab);
-  let bin='';
-  const CHUNK=8192;
-  for(let i=0;i<bytes.length;i+=CHUNK)
-    bin+=String.fromCharCode(...bytes.subarray(i,Math.min(i+CHUNK,bytes.length)));
-  return btoa(bin);
-}
-
-function b642ab(b64){
-  const bin=atob(b64);
-  const bytes=new Uint8Array(bin.length);
-  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-  return bytes.buffer;
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// ── EXPORT SESSION ─────────────────────────────────────────────────────────────
-// ═══════════════════════════════════════════════════════════════════════════════
+// ── Export / Import ────────────────────────────────────────────────────────────
 async function exportSession(){
   if(!state.samples.length){toast('NO SAMPLES TO EXPORT','#ff5252');return;}
   showProgress('ENCODING SESSION','preparing audio…',5);
   await new Promise(r=>setTimeout(r,60));
-
   try{
     const samplesData=[];
     for(let i=0;i<state.samples.length;i++){
       const s=state.samples[i];
       showProgress('ENCODING SESSION',`encoding: ${s.name}`,5+Math.floor((i/state.samples.length)*85));
-      await new Promise(r=>setTimeout(r,0)); // yield to render
-      samplesData.push({
-        id:s.id, name:s.name, duration:s.duration,
-        wav: ab2b64(encodeWAV(bufs[s.id]))
-      });
+      await new Promise(r=>setTimeout(r,0));
+      samplesData.push({id:s.id,name:s.name,duration:s.duration,wav:ab2b64(encodeWAV(bufs[s.id]))});
     }
-
-    showProgress('ENCODING SESSION','building session file…',93);
-    await new Promise(r=>setTimeout(r,0));
-
-    const session={
-      version:2,
-      appName:'CHOP-X',
-      savedAt:new Date().toISOString(),
-      bpm:parseInt(document.getElementById('bpmInput').value)||120,
-      masterVol:state.masterVol,
-      samples:samplesData,
-      pads:state.pads.map(p=>({...p})),
-      region:state.region,
-      editorId:state.editorId,
-    };
-
-    showProgress('ENCODING SESSION','downloading…',99);
-    await new Promise(r=>setTimeout(r,0));
-
-    const json=JSON.stringify(session);
-    const blob=new Blob([json],{type:'application/json'});
-    const url=URL.createObjectURL(blob);
-    const a=document.createElement('a');
-    const ts=new Date().toISOString().slice(0,10);
-    a.href=url; a.download=`chopx-${ts}.chopx`;
-    document.body.appendChild(a); a.click();
-    setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1000);
-
-    hideProgress();
-    const sizeMB=(blob.size/1048576).toFixed(1);
-    toast(`SESSION EXPORTED · ${sizeMB} MB · ${state.samples.length} SAMPLE${state.samples.length!==1?'S':''}`, '#4dff91');
-  }catch(err){
-    hideProgress();
-    toast('EXPORT FAILED','#ff5252');
-    console.error(err);
-  }
+    showProgress('ENCODING SESSION','building session file…',93);await new Promise(r=>setTimeout(r,0));
+    const session={version:3,appName:'CHOP-X',savedAt:new Date().toISOString(),bpm:state.tempo,masterVol:state.masterVol,masterPitch:state.masterPitch,samples:samplesData,pads:state.pads.map(p=>({...p})),region:state.region,editorId:state.editorId};
+    showProgress('ENCODING SESSION','downloading…',99);await new Promise(r=>setTimeout(r,0));
+    const json=JSON.stringify(session);const blob=new Blob([json],{type:'application/json'});
+    const url=URL.createObjectURL(blob);const a=document.createElement('a');
+    a.href=url;a.download=`chopx-${new Date().toISOString().slice(0,10)}.chopx`;
+    document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(url);a.remove();},1000);
+    hideProgress();toast(`SESSION EXPORTED · ${(blob.size/1048576).toFixed(1)} MB`,'#4dff91');
+  }catch(err){hideProgress();toast('EXPORT FAILED','#ff5252');console.error(err);}
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// ── IMPORT SESSION ─────────────────────────────────────────────────────────────
-// ═══════════════════════════════════════════════════════════════════════════════
 async function importSession(input){
-  const file=input.files[0];
-  if(!file)return;
-  input.value='';
-  showProgress('LOADING SESSION','reading file…',5);
-  await new Promise(r=>setTimeout(r,60));
-
+  const file=input.files[0];if(!file)return;input.value='';
+  showProgress('LOADING SESSION','reading file…',5);await new Promise(r=>setTimeout(r,60));
   try{
-    const text=await file.text();
-    showProgress('LOADING SESSION','parsing session…',12);
-    await new Promise(r=>setTimeout(r,0));
-
-    const session=JSON.parse(text);
-    if(!session.appName||!session.samples){
-      hideProgress(); toast('INVALID .CHOPX FILE','#ff5252'); return;
-    }
-
-    // Stop all playback
+    const session=JSON.parse(await file.text());
+    if(!session.appName||!session.samples){hideProgress();toast('INVALID .CHOPX FILE','#ff5252');return;}
     stopPreview();
     Object.values(srcs).forEach(s=>{try{s.stop();}catch{}});
-    Object.keys(srcs).forEach(k=>delete srcs[k]);
-    Object.keys(gainNodes).forEach(k=>delete gainNodes[k]);
-    Object.keys(bufs).forEach(k=>delete bufs[k]);
-    Object.keys(waves).forEach(k=>delete waves[k]);
-    state.samples=[];
-    state.activePads.clear();
-    state.selectedPad=null;
-    state.editorId=null;
-
-    const ctx=getCtx();
-    let failed=0;
+    [srcs,gainNodes,bufs,waves].forEach(obj=>Object.keys(obj).forEach(k=>delete obj[k]));
+    state.samples=[];state.activePads.clear();state.selectedPad=null;state.editorId=null;state.chopPoints=[];
+    const ctx=getCtx();let failed=0;
     for(let i=0;i<session.samples.length;i++){
       const sd=session.samples[i];
       showProgress('LOADING SESSION',`decoding: ${sd.name}`,12+Math.floor((i/session.samples.length)*78));
       await new Promise(r=>setTimeout(r,0));
-      try{
-        const ab=b642ab(sd.wav);
-        const audioBuf=await ctx.decodeAudioData(ab);
-        bufs[sd.id]=audioBuf;
-        waves[sd.id]=buildWave(audioBuf);
-        state.samples.push({id:sd.id,name:sd.name,duration:sd.duration});
-      }catch(e){
-        console.warn('Failed to decode sample:',sd.name,e);
-        failed++;
-      }
+      try{const buf=await ctx.decodeAudioData(b642ab(sd.wav));bufs[sd.id]=buf;waves[sd.id]=buildWave(buf);state.samples.push({id:sd.id,name:sd.name,duration:sd.duration});}
+      catch(e){console.warn('Failed:',sd.name,e);failed++;}
     }
-
-    showProgress('LOADING SESSION','restoring pads…',93);
-    await new Promise(r=>setTimeout(r,0));
-
-    // Restore pads — null out any sampleId that didn't load
-    session.pads.forEach((p,i)=>{
-      state.pads[i]={...state.pads[i],...p};
-      if(p.sampleId&&!bufs[p.sampleId]) state.pads[i].sampleId=null;
-    });
-
-    state.editorId = session.editorId&&bufs[session.editorId]
-      ? session.editorId
-      : (state.samples[0]?.id||null);
-    state.region = session.region||{start:0,end:1};
-    state.masterVol = session.masterVol||0.8;
-    if(masterGain) masterGain.gain.value=state.masterVol;
+    showProgress('LOADING SESSION','restoring pads…',93);await new Promise(r=>setTimeout(r,0));
+    session.pads.forEach((p,i)=>{state.pads[i]={...state.pads[i],...p};if(p.sampleId&&!bufs[p.sampleId])state.pads[i].sampleId=null;});
+    state.editorId=session.editorId&&bufs[session.editorId]?session.editorId:(state.samples[0]?.id||null);
+    state.region=session.region||{start:0,end:1};state.zoom={start:0,end:1};
+    state.masterVol=session.masterVol||0.8;if(masterGain)masterGain.gain.value=state.masterVol;
     document.getElementById('masterVol').value=state.masterVol;
-    if(session.bpm) document.getElementById('bpmInput').value=session.bpm;
-
-    renderSampleBrowser(); renderEditorTitle(); drawWaveform();
-    renderWaveReadout(); syncPreviewUI(); renderPads(); renderInspector();
-    renderAssignBtn(); renderArmedCt();
-
+    if(session.bpm){state.tempo=session.bpm;document.getElementById('bpmInput').value=session.bpm;if(tempoKnobInst){tempoKnobInst.value=session.bpm;tempoKnobInst.draw();}document.getElementById('tempoVal').textContent=session.bpm;}
+    document.getElementById('btnAutoChop').disabled=!state.editorId;
+    renderSampleBrowser();renderEditorTitle();drawWaveform();renderWaveReadout();syncPreviewUI();renderPads();renderInspector();renderAssignBtn();renderArmedCt();renderPadMiniBar();
     hideProgress();
-    if(failed>0) toast(`SESSION LOADED · ${failed} SAMPLE${failed!==1?'S':''} FAILED TO DECODE`,'#ffca28');
-    else toast(`SESSION LOADED ✓ · ${state.samples.length} SAMPLE${state.samples.length!==1?'S':''}`, '#4dff91');
-  }catch(err){
-    hideProgress();
-    toast('IMPORT FAILED — CORRUPT OR INVALID FILE','#ff5252');
-    console.error(err);
-  }
+    if(failed>0)toast(`SESSION LOADED · ${failed} SAMPLE${failed!==1?'S':''} FAILED`,'#ffca28');
+    else toast(`SESSION LOADED ✓ · ${state.samples.length} SAMPLES`,'#4dff91');
+  }catch(err){hideProgress();toast('IMPORT FAILED — CORRUPT OR INVALID FILE','#ff5252');console.error(err);}
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// ── SPEED DIAL ─────────────────────────────────────────────────────────────────
-// Saves pad layout + chop settings to localStorage.
-// Audio is matched by sample name when loading.
-// No audio is stored here — use Export for full portability.
-// ═══════════════════════════════════════════════════════════════════════════════
-const SD_KEY   = 'chopx_speeddial_v1';
-const SD_COUNT = 8;
-
-function getSpeedDials(){
-  try{ return JSON.parse(localStorage.getItem(SD_KEY)||'[]'); }
-  catch{ return []; }
-}
-function setSpeedDials(data){
-  try{ localStorage.setItem(SD_KEY,JSON.stringify(data)); }
-  catch{ toast('SAVE FAILED — STORAGE FULL','#ff5252'); }
-}
-
+// ── Speed Dial ────────────────────────────────────────────────────────────────
+const SD_KEY='chopx_speeddial_v1';const SD_COUNT=8;
+function getSpeedDials(){try{return JSON.parse(localStorage.getItem(SD_KEY)||'[]');}catch{return[];}}
+function setSpeedDials(data){try{localStorage.setItem(SD_KEY,JSON.stringify(data));}catch{toast('SAVE FAILED — STORAGE FULL','#ff5252');}}
 function saveSpeedDial(slot){
-  // Prevent event from bubbling to toggleSpeedDial
   event?.stopPropagation();
-  const slots=getSpeedDials();
-  const existing=slots[slot];
-  const defaultName=existing?.name||`Kit ${slot+1}`;
-  const name=prompt(`NAME FOR SLOT ${slot+1}:`, defaultName);
-  if(name===null) return; // cancelled
-
-  // Store pad layout with sample names (not IDs) for matching on re-load
-  const padData=state.pads.map(p=>{
-    const sn=p.sampleId ? (state.samples.find(s=>s.id===p.sampleId)?.name||null) : null;
-    return {...p, _sampleName:sn};
-  });
-
-  slots[slot]={
-    name: name.trim()||defaultName,
-    savedAt: Date.now(),
-    pads: padData,
-    armedCount: state.pads.filter(p=>p.sampleId).length,
-    sampleNames: [...new Set(padData.map(p=>p._sampleName).filter(Boolean))],
-  };
-
-  setSpeedDials(slots);
-  renderSpeedDial();
-  toast(`⚡ SLOT ${slot+1} SAVED — ${slots[slot].name}`, '#6688ff');
+  const slots=getSpeedDials();const existing=slots[slot];
+  const name=prompt(`NAME FOR SLOT ${slot+1}:`,existing?.name||`Kit ${slot+1}`);
+  if(name===null)return;
+  const padData=state.pads.map(p=>{const sn=p.sampleId?(state.samples.find(s=>s.id===p.sampleId)?.name||null):null;return{...p,_sampleName:sn};});
+  slots[slot]={name:name.trim()||`Kit ${slot+1}`,savedAt:Date.now(),pads:padData,armedCount:state.pads.filter(p=>p.sampleId).length,sampleNames:[...new Set(padData.map(p=>p._sampleName).filter(Boolean))]};
+  setSpeedDials(slots);renderSpeedDial();toast(`⚡ SLOT ${slot+1} SAVED — ${slots[slot].name}`,'#6688ff');
 }
-
 function loadSpeedDial(slot){
   event?.stopPropagation();
-  const slots=getSpeedDials();
-  const sd=slots[slot];
-  if(!sd){ toast(`SLOT ${slot+1} IS EMPTY`, '#ff5252'); return; }
-
-  let matched=0, missing=0;
+  const slots=getSpeedDials();const sd=slots[slot];
+  if(!sd){toast(`SLOT ${slot+1} IS EMPTY`,'#ff5252');return;}
+  let matched=0,missing=0;
   sd.pads.forEach((p,i)=>{
-    const base={...state.pads[i], ...p};
-    delete base._sampleName;
-
-    if(p._sampleName){
-      // Try to find by exact name, then by partial match
-      const found = state.samples.find(s=>s.name===p._sampleName)
-                 || state.samples.find(s=>s.name.includes(p._sampleName)||p._sampleName.includes(s.name));
-      if(found){ base.sampleId=found.id; matched++; }
-      else{ base.sampleId=null; missing++; }
-    } else {
-      base.sampleId=null;
-    }
+    const base={...state.pads[i],...p};delete base._sampleName;
+    if(p._sampleName){const found=state.samples.find(s=>s.name===p._sampleName)||state.samples.find(s=>s.name.includes(p._sampleName)||p._sampleName.includes(s.name));if(found){base.sampleId=found.id;matched++;}else{base.sampleId=null;missing++;}}
+    else{base.sampleId=null;}
     state.pads[i]=base;
   });
-
-  renderPads(); renderInspector(); renderAssignBtn(); renderArmedCt();
-
-  if(missing>0 && matched===0)
-    toast(`${sd.name} LOADED · LOAD AUDIO FIRST`, '#ffca28');
-  else if(missing>0)
-    toast(`${sd.name} · ${matched} MATCHED · ${missing} MISSING`, '#ffca28');
-  else
-    toast(`⚡ ${sd.name} LOADED · ${matched} PADS`, '#6688ff');
+  renderPads();renderInspector();renderAssignBtn();renderArmedCt();renderPadMiniBar();
+  if(missing>0&&matched===0)toast(`${sd.name} LOADED · LOAD AUDIO FIRST`,'#ffca28');
+  else if(missing>0)toast(`${sd.name} · ${matched} MATCHED · ${missing} MISSING`,'#ffca28');
+  else toast(`⚡ ${sd.name} LOADED · ${matched} PADS`,'#6688ff');
 }
-
 function clearSpeedDial(slot){
   event?.stopPropagation();
-  const slots=getSpeedDials();
-  const sd=slots[slot];
-  if(!sd) return;
-  if(!confirm(`Clear slot ${slot+1} "${sd.name}"?`)) return;
-  slots[slot]=null;
-  setSpeedDials(slots);
-  renderSpeedDial();
-  toast(`SLOT ${slot+1} CLEARED`, '#ff5252');
+  const slots=getSpeedDials();const sd=slots[slot];
+  if(!sd)return;if(!confirm(`Clear slot ${slot+1} "${sd.name}"?`))return;
+  slots[slot]=null;setSpeedDials(slots);renderSpeedDial();toast(`SLOT ${slot+1} CLEARED`,'#ff5252');
 }
-
 function renderSpeedDial(){
-  const grid=document.getElementById('sdGrid');
-  if(!grid) return;
-  const slots=getSpeedDials();
-  grid.innerHTML='';
-
+  const grid=document.getElementById('sdGrid');if(!grid)return;
+  const slots=getSpeedDials();grid.innerHTML='';
   for(let i=0;i<SD_COUNT;i++){
-    const sd=slots[i]||null;
-    const wrap=document.createElement('div');
+    const sd=slots[i]||null;const wrap=document.createElement('div');
     wrap.className='sd-slot'+(sd?' has-data':'');
-
     if(sd){
-      // Colour pips for each pad in the saved layout
-      const pipColors=sd.pads
-        ? sd.pads.map((p,idx)=>p._sampleName?PAD_COLORS[idx]:'').filter(Boolean)
-        : [];
+      const pipColors=sd.pads?sd.pads.map((p,idx)=>p._sampleName?PAD_COLORS[idx]:'').filter(Boolean):[];
       const pipHtml=pipColors.slice(0,16).map(c=>`<div class="sd-pip" style="background:${c}"></div>`).join('');
       const dt=new Date(sd.savedAt).toLocaleDateString('en-GB',{day:'2-digit',month:'short'});
-      wrap.innerHTML=`
-        <div style="display:flex;justify-content:space-between;align-items:flex-start">
-          <div class="sd-slot-num">SLOT ${i+1}</div>
-          <div style="color:#1e1e38;font-size:7px">${dt}</div>
-        </div>
-        <div class="sd-slot-name">${sd.name}</div>
-        <div class="sd-slot-meta">${sd.armedCount||0} PADS ARMED</div>
-        ${pipHtml?`<div class="sd-pips">${pipHtml}</div>`:''}
-        <div class="sd-slot-actions">
-          <button class="sd-btn sd-btn-load" onclick="loadSpeedDial(${i})">▶ LOAD</button>
-          <button class="sd-btn sd-btn-save" onclick="saveSpeedDial(${i})" title="Overwrite">✎</button>
-          <button class="sd-btn sd-btn-clear" onclick="clearSpeedDial(${i})" title="Delete">✕</button>
-        </div>
-      `;
+      wrap.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start"><div class="sd-slot-num">SLOT ${i+1}</div><div style="color:#1e1e38;font-size:7px">${dt}</div></div><div class="sd-slot-name">${sd.name}</div><div class="sd-slot-meta">${sd.armedCount||0} PADS ARMED</div>${pipHtml?`<div class="sd-pips">${pipHtml}</div>`:''}<div class="sd-slot-actions"><button class="sd-btn sd-btn-load" onclick="loadSpeedDial(${i})">▶ LOAD</button><button class="sd-btn sd-btn-save" onclick="saveSpeedDial(${i})" title="Overwrite">✎</button><button class="sd-btn sd-btn-clear" onclick="clearSpeedDial(${i})" title="Delete">✕</button></div>`;
     } else {
-      wrap.innerHTML=`
-        <div class="sd-slot-num">SLOT ${i+1}</div>
-        <div class="sd-slot-meta" style="flex:1;display:flex;align-items:center;color:#111128;font-size:8px">EMPTY</div>
-        <button class="sd-empty-save" onclick="saveSpeedDial(${i})">+ SAVE HERE</button>
-      `;
+      wrap.innerHTML=`<div class="sd-slot-num">SLOT ${i+1}</div><div class="sd-slot-meta" style="flex:1;display:flex;align-items:center;color:#111128;font-size:8px">EMPTY</div><button class="sd-empty-save" onclick="saveSpeedDial(${i})">+ SAVE HERE</button>`;
     }
     grid.appendChild(wrap);
   }
 }
-
 let sdVisible=false;
 function toggleSpeedDial(){
   sdVisible=!sdVisible;
   document.getElementById('sdBody').style.display=sdVisible?'block':'none';
   document.getElementById('sdToggle').textContent=sdVisible?'▲ HIDE':'▼ SHOW';
-  if(sdVisible) renderSpeedDial();
+  if(sdVisible)renderSpeedDial();
 }
 
-// ── Init ──────────────────────────────────────────────────────────────────────
+// ── Init ───────────────────────────────────────────────────────────────────────
+// Set initial mobile tab
+if(window.innerWidth<768){
+  setMobTab('Pads');
+} else {
+  // On desktop, all panels visible — remove mob-panel constraints
+  document.querySelectorAll('.mob-panel').forEach(p=>p.classList.add('mob-active'));
+}
+// Handle resize: toggle between mobile and desktop layout
+window.addEventListener('resize',()=>{
+  if(window.innerWidth>=768){
+    document.querySelectorAll('.mob-panel').forEach(p=>p.classList.add('mob-active'));
+  } else {
+    // Let tab system control
+    document.querySelectorAll('.mob-panel').forEach(p=>p.classList.remove('mob-active'));
+    const activeTab=document.querySelector('.mob-tab-btn.active')?.dataset.tab||'Pads';
+    setMobTab(activeTab);
+  }
+});
+
 renderPads();
 renderInspector();
 renderAssignBtn();
@@ -1304,6 +1585,7 @@ renderArmedCt();
 drawWaveform();
 renderWaveReadout();
 syncPreviewUI();
+renderPadMiniBar();
 </script>
 </body>
 </html>
